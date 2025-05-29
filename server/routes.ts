@@ -1,4 +1,4 @@
-import type { Express } from "express";
+import express, { type Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
@@ -53,6 +53,7 @@ async function validateApiKey(req: any, res: any, next: any) {
   
   // Log API usage
   await storage.logUserActivity({
+    id: randomBytes(16).toString('hex'),
     userId: user.id,
     action: "api_call",
     metadata: {
@@ -110,6 +111,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.updateProfile(userId, profileData);
       
       await storage.logUserActivity({
+        id: randomBytes(16).toString('hex'),
         userId,
         action: "profile_updated",
         metadata: { fields: Object.keys(profileData) },
@@ -137,6 +139,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.updateProfilePicture(userId, imageUrl);
       
       await storage.logUserActivity({
+        id: randomBytes(16).toString('hex'),
         userId,
         action: "profile_picture_updated",
         metadata: { filename: req.file.filename },
@@ -169,6 +172,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const result = await storage.generateApiKey(userId, name);
       
       await storage.logUserActivity({
+        id: randomBytes(16).toString('hex'),
         userId,
         action: "api_key_generated",
         metadata: { keyName: name },
@@ -189,6 +193,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const result = await storage.regenerateApiKey(userId, keyId);
       
       await storage.logUserActivity({
+        id: randomBytes(16).toString('hex'),
         userId,
         action: "api_key_regenerated",
         metadata: { keyId },
@@ -301,6 +306,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.toggleUserStatus(userId, isActive);
       
       await storage.logUserActivity({
+        id: randomBytes(16).toString('hex'),
         userId: req.user.claims.sub,
         action: "user_status_changed",
         metadata: { targetUserId: userId, newStatus: isActive },
