@@ -350,5 +350,7 @@ app.patch('/api/admin/users/:userId/status', isAuthenticated, requireAdmin, asyn
   }
 });
 
-const httpServer = createServer(app);
-export default httpServer;
+export function registerRoutes(app) {
+  const httpServer = createServer(app);
+  return httpServer;
+}
