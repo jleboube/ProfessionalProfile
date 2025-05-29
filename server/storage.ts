@@ -41,6 +41,9 @@ export interface IStorage {
   
   // Activity tracking
   logUserActivity(activity: InsertUserActivity): Promise<UserActivity>;
+
+  getUserByEmail(email: string): Promise<User | undefined>;
+  createUser({ email, passwordHash, firstName, lastName }: { email: string, passwordHash: string, firstName?: string, lastName?: string }): Promise<User>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -249,6 +252,28 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return userActivityRecord;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser({ email, passwordHash, firstName, lastName }: { email: string, passwordHash: string, firstName?: string, lastName?: string }): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values({
+        id: randomBytes(16).toString('hex'),
+        email,
+        passwordHash,
+        firstName,
+        lastName,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+    return user;
   }
 }
 

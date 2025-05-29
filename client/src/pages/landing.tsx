@@ -2,11 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Users, Shield, Zap, UserPlus, Eye, Code } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function Landing() {
-  const handleLogin = () => {
-    window.location.href = "/api/login";
-  };
+  const [, navigate] = useLocation();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -17,9 +16,12 @@ export default function Landing() {
             <div className="flex items-center">
               <h1 className="text-xl font-semibold text-gray-900">ProfileHub</h1>
             </div>
-            <div className="flex items-center">
-              <Button onClick={handleLogin} className="bg-primary hover:bg-blue-700">
+            <div className="flex items-center space-x-2">
+              <Button onClick={() => navigate('/login')} className="bg-primary hover:bg-blue-700">
                 Sign In
+              </Button>
+              <Button onClick={() => navigate('/register')} variant="outline">
+                Register
               </Button>
             </div>
           </div>
@@ -37,9 +39,12 @@ export default function Landing() {
             A comprehensive platform for managing user profiles with authentication, 
             admin controls, and API access. Perfect for modern applications.
           </p>
-          <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-            <Button onClick={handleLogin} size="lg" className="bg-primary hover:bg-blue-700">
+          <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8 space-x-2">
+            <Button onClick={() => navigate('/login')} size="lg" className="bg-primary hover:bg-blue-700">
               Get Started
+            </Button>
+            <Button onClick={() => navigate('/register')} size="lg" variant="outline">
+              Register
             </Button>
           </div>
         </div>
@@ -184,7 +189,7 @@ export default function Landing() {
             Join thousands of users who trust ProfileHub for their profile management needs.
           </p>
           <div className="mt-8">
-            <Button onClick={handleLogin} size="lg" className="bg-primary hover:bg-blue-700">
+            <Button onClick={() => navigate('/login')} size="lg" className="bg-primary hover:bg-blue-700">
               Start Managing Profiles Today
             </Button>
           </div>

@@ -12,8 +12,9 @@ import { ChevronDown, User, LogOut } from "lucide-react";
 export default function Navigation() {
   const { user } = useAuth();
 
-  const handleLogout = () => {
-    window.location.href = "/api/logout";
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST", credentials: "include" });
+    window.location.href = "/";
   };
 
   if (!user) return null;
