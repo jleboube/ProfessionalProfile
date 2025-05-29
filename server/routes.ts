@@ -10,7 +10,7 @@ import { randomBytes } from "crypto";
 import session from "express-session";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 // Configure multer for file uploads
 const uploadDir = path.join(process.cwd(), "uploads");
