@@ -11,6 +11,8 @@ import session from "express-session";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
+import pgSession from "connect-pg-simple";
+import { Pool } from "pg";
 
 // Configure multer for file uploads
 const uploadDir = path.join(process.cwd(), "uploads");
@@ -42,16 +44,20 @@ const upload = multer({
 // Session setup
 const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
 const app = express();
-app.use(session({
-  secret: process.env.SESSION_SECRET || "changeme-session-secret",
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: false, // set to true if using HTTPS
-    maxAge: sessionTtl,
-  },
-}));
+const pgSessionStore = pgSession(session);
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+app.use(
+  session({
+    store: new pgSessionStore({
+      pool: pool,
+      tableName: "session",
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // set to true if using HTTPS
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
