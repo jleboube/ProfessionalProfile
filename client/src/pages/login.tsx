@@ -28,7 +28,7 @@ export default function Login() {
         setError(data.message || "Login failed");
       } else {
         // Reload user state or redirect
-        navigate("/");
+        navigate("/home");
       }
     } catch (err) {
       setError("Network error");

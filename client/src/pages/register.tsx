@@ -30,7 +30,7 @@ export default function Register() {
         setError(data.message || "Registration failed");
       } else {
         // Reload user state or redirect
-        navigate("/");
+        navigate("/home");
       }
     } catch (err) {
       setError("Network error");

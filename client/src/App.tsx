@@ -25,6 +25,7 @@ function Router() {
         </>
       ) : (
         <>
+          <Route path="/home" component={Home} />
           <Route path="/" component={Home} />
         </>
       )}
