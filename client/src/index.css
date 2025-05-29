@@ -85,7 +85,7 @@
   }
 
   .bg-muted {
-    @apply bg-muted;
+    background-color: hsl(var(--muted));
   }
 }
 
