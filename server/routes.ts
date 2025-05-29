@@ -351,4 +351,4 @@ app.patch('/api/admin/users/:userId/status', isAuthenticated, requireAdmin, asyn
 });
 
 const httpServer = createServer(app);
-return httpServer;
+export default httpServer;
