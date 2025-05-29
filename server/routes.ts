@@ -12,7 +12,8 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
 import pgSession from "connect-pg-simple";
-import { Pool } from "pg";
+import pkg from "pg";
+const { Pool } = pkg;
 
 // Configure multer for file uploads
 const uploadDir = path.join(process.cwd(), "uploads");
