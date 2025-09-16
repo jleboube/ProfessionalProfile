@@ -1,0 +1,39 @@
+---
+import type { ProfileData } from '../utils/data';
+
+interface Props {
+  profile: ProfileData;
+  blogEnabled: boolean;
+}
+
+const { profile, blogEnabled } = Astro.props;
+---
+
+<nav class="sticky top-0 z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-gray-900 dark:text-white">
+        {profile.name || 'Portfolio'}
+      </a>
+      <div class="flex items-center space-x-6">
+        <a href="/#hero" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+          About
+        </a>
+        <a href="/resume" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+          Resume
+        </a>
+        <a href="/#projects" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+          Projects
+        </a>
+        {blogEnabled && (
+          <a href="/blog" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+            Blog
+          </a>
+        )}
+        <a href="/#contact" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+          Contact
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

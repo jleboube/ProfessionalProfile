@@ -1,0 +1,76 @@
+---
+import type { ResumeEntry } from '../utils/data';
+
+interface Props {
+  resume: ResumeEntry[];
+}
+
+const { resume } = Astro.props;
+
+// Group resume entries by type
+const experience = resume.filter(entry => entry.type === 'experience' || !entry.type);
+const education = resume.filter(entry => entry.type === 'education');
+const awards = resume.filter(entry => entry.type === 'awards');
+
+const sections = [
+  { title: 'Professional Experience', entries: experience, icon: '💼' },
+  { title: 'Education', entries: education, icon: '🎓' },
+  { title: 'Awards & Recognition', entries: awards, icon: '🏆' }
+].filter(section => section.entries.length > 0);
+---
+
+<section id="resume" class="py-20 bg-gray-50 dark:bg-gray-900">
+  <div class="container mx-auto px-4">
+    <h2 class="text-4xl font-bold text-center mb-12">Resume</h2>
+    <div class="max-w-4xl mx-auto space-y-12">
+      {sections.length > 0 ? (
+        sections.map(section => (
+          <div>
+            <h3 class="text-2xl font-semibold mb-8 flex items-center gap-3">
+              <span class="text-2xl">{section.icon}</span>
+              {section.title}
+            </h3>
+            <div class="relative">
+              <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-700"></div>
+              {section.entries.map((entry, index) => (
+                <div class="relative flex items-start mb-8">
+                  <div class="absolute left-8 w-4 h-4 bg-primary-600 rounded-full -translate-x-1/2 mt-1.5"></div>
+                  <div class="ml-20 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full">
+                    <div class="flex flex-wrap items-start justify-between mb-2">
+                      <div>
+                        {entry.type === 'education' ? (
+                          <>
+                            <h4 class="text-xl font-semibold">{entry.degree || entry.role}</h4>
+                            <p class="text-primary-600 dark:text-primary-400">{entry.school || entry.company}</p>
+                          </>
+                        ) : entry.type === 'awards' ? (
+                          <>
+                            <h4 class="text-xl font-semibold">{entry.award || entry.role}</h4>
+                            <p class="text-primary-600 dark:text-primary-400">{entry.organization || entry.company}</p>
+                          </>
+                        ) : (
+                          <>
+                            <h4 class="text-xl font-semibold">{entry.role}</h4>
+                            <p class="text-primary-600 dark:text-primary-400">{entry.company}</p>
+                          </>
+                        )}
+                      </div>
+                      <span class="text-sm text-gray-500 dark:text-gray-400">
+                        {entry.start} - {entry.end || 'Present'}
+                      </span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 whitespace-pre-line">{entry.summary}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      ) : (
+        <div class="text-center text-gray-500 dark:text-gray-400">
+          <p>No resume data available yet.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</section>

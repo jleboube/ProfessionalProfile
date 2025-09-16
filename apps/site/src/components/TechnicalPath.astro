@@ -1,0 +1,156 @@
+---
+import type { ResumeEntry } from '../utils/data';
+
+interface Props {
+  resume: ResumeEntry[];
+}
+
+const { resume } = Astro.props;
+
+// Logic to generate summary from resume data
+function generateTechnicalSummary(resume: ResumeEntry[]) {
+  const experience = resume.filter(entry => entry.type === 'experience' || !entry.type);
+  const education = resume.filter(entry => entry.type === 'education');
+  const awards = resume.filter(entry => entry.type === 'awards');
+  
+  // Calculate years of experience
+  const currentYear = new Date().getFullYear();
+  let earliestYear = currentYear;
+  
+  experience.forEach(entry => {
+    if (entry.start) {
+      const startYear = parseInt(entry.start);
+      if (!isNaN(startYear) && startYear < earliestYear) {
+        earliestYear = startYear;
+      }
+    }
+  });
+  
+  const yearsOfExperience = earliestYear < currentYear ? currentYear - earliestYear : 0;
+  
+  // Get current or most recent role
+  const currentRole = experience.find(entry => !entry.end || entry.end.toLowerCase().includes('present'))?.role || 
+                     experience[0]?.role || 'Professional';
+  
+  // Count companies worked at
+  const companiesCount = new Set(experience.map(entry => entry.company).filter(Boolean)).size;
+  
+  // Get education summary
+  const educationSummary = education.length > 0 ? 
+    education.map(entry => entry.degree || entry.role).filter(Boolean).join(', ') : null;
+  
+  // Get recent achievements
+  const recentAchievements = awards.length > 0 ? awards.slice(0, 2) : [];
+  
+  return {
+    yearsOfExperience,
+    currentRole,
+    companiesCount,
+    educationSummary,
+    recentAchievements,
+    totalExperiences: experience.length,
+    totalEducation: education.length,
+    totalAwards: awards.length
+  };
+}
+
+const summary = generateTechnicalSummary(resume);
+---
+
+<section id="technical-path" class="py-20 bg-gray-50 dark:bg-gray-900">
+  <div class="container mx-auto px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-4xl font-bold mb-8">My Technical Path</h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300 mb-12">
+        A journey of continuous learning and professional growth
+      </p>
+      
+      {resume.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {summary.yearsOfExperience > 0 && (
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+              <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+                {summary.yearsOfExperience}+
+              </div>
+              <div class="text-gray-600 dark:text-gray-300">
+                Years of Experience
+              </div>
+            </div>
+          )}
+          
+          {summary.companiesCount > 0 && (
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+              <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+                {summary.companiesCount}
+              </div>
+              <div class="text-gray-600 dark:text-gray-300">
+                Companies Worked With
+              </div>
+            </div>
+          )}
+          
+          {summary.totalAwards > 0 && (
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+              <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+                {summary.totalAwards}
+              </div>
+              <div class="text-gray-600 dark:text-gray-300">
+                Awards & Recognition
+              </div>
+            </div>
+          )}
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+          <h3 class="text-2xl font-semibold mb-4">Current Focus</h3>
+          <p class="text-lg text-gray-600 dark:text-gray-300 mb-4">
+            Currently working as <span class="font-semibold text-primary-600 dark:text-primary-400">{summary.currentRole}</span>
+            {summary.companiesCount > 1 && (
+              <span>, having contributed to {summary.companiesCount} different organizations</span>
+            )}
+          </p>
+          
+          {summary.educationSummary && (
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              Educational background: <span class="font-semibold">{summary.educationSummary}</span>
+            </p>
+          )}
+          
+          {summary.recentAchievements.length > 0 && (
+            <div class="mt-4">
+              <h4 class="font-semibold mb-2">Recent Achievements:</h4>
+              <ul class="text-left text-gray-600 dark:text-gray-300">
+                {summary.recentAchievements.map(achievement => (
+                  <li class="mb-1">🏆 {achievement.award || achievement.role} at {achievement.organization || achievement.company}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+        
+        <div class="flex justify-center">
+          <a
+            href="/resume"
+            class="px-8 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            View Full Resume
+          </a>
+        </div>
+      ) : (
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+          <p class="text-gray-500 dark:text-gray-400">
+            Professional experience will be showcased here once resume data is added.
+          </p>
+          <div class="mt-4">
+            <a
+              href="/resume"
+              class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              Add Resume Data
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</section>

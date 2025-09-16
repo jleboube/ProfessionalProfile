@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-gray-50">
+    <div x-data="adminApp()" x-init="init()" class="min-h-screen">
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <h1 class="text-xl font-semibold">Portfolio Admin</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button @click="activeTab = 'content'" :class="activeTab === 'content' ? 'text-blue-600' : 'text-gray-600'" class="px-3 py-2">
+                            Content
+                        </button>
+                        <button @click="activeTab = 'blog'" :class="activeTab === 'blog' ? 'text-blue-600' : 'text-gray-600'" class="px-3 py-2" x-show="data.blogEnabled">
+                            Blog
+                        </button>
+                        <button @click="activeTab = 'media'" :class="activeTab === 'media' ? 'text-blue-600' : 'text-gray-600'" class="px-3 py-2">
+                            Media Library
+                        </button>
+                        <button @click="saveData()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <template x-if="!data.setupCompleted && showSetup">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-2xl font-bold mb-6">Welcome! Let's set up your portfolio</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Your Name</label>
+                            <input type="text" x-model="setupAnswers.name" class="w-full px-3 py-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Professional Title</label>
+                            <input type="text" x-model="setupAnswers.title" class="w-full px-3 py-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Bio</label>
+                            <textarea x-model="setupAnswers.bio" rows="3" class="w-full px-3 py-2 border rounded"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Location</label>
+                            <input type="text" x-model="setupAnswers.location" class="w-full px-3 py-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Email</label>
+                            <input type="email" x-model="setupAnswers.email" class="w-full px-3 py-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">GitHub Username</label>
+                            <input type="text" x-model="setupAnswers.githubUsername" class="w-full px-3 py-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">LinkedIn Username</label>
+                            <input type="text" x-model="setupAnswers.linkedInUsername" placeholder="e.g., john-doe" class="w-full px-3 py-2 border rounded">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Enable Blog?</label>
+                            <select x-model="setupAnswers.blogEnabled" class="w-full px-3 py-2 border rounded">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                        <button @click="completeSetup()" class="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                            Complete Setup
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="data.setupCompleted || !showSetup">
+                <div>
+                    <!-- Content Tab -->
+                    <div x-show="activeTab === 'content'" class="space-y-6">
+                        <div class="bg-white rounded-lg shadow">
+                            <div class="px-6 py-4 border-b">
+                                <h2 class="text-lg font-semibold">Profile Information</h2>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-1 grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium mb-1">Name</label>
+                                            <input type="text" x-model="data.profile.name" class="w-full px-3 py-2 border rounded">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium mb-1">Title</label>
+                                            <input type="text" x-model="data.profile.title" class="w-full px-3 py-2 border rounded">
+                                        </div>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <label class="block text-sm font-medium mb-1">Profile Photo</label>
+                                        <div class="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-blue-500" @click="selectImageFor('profile')">
+                                            <template x-if="data.profile.photo">
+                                                <img :src="data.profile.photo" class="w-full h-full object-cover rounded-lg">
+                                            </template>
+                                            <template x-if="!data.profile.photo">
+                                                <span class="text-gray-400 text-sm">Click to select</span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Bio</label>
+                                    <textarea x-model="data.profile.bio" rows="3" class="w-full px-3 py-2 border rounded"></textarea>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Location</label>
+                                        <input type="text" x-model="data.profile.location" class="w-full px-3 py-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Email</label>
+                                        <input type="email" x-model="data.profile.email" class="w-full px-3 py-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">GitHub Username</label>
+                                        <input type="text" x-model="data.profile.githubUsername" class="w-full px-3 py-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">LinkedIn Username</label>
+                                        <input type="text" x-model="data.profile.linkedInUsername" placeholder="e.g., john-doe" class="w-full px-3 py-2 border rounded">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow">
+                            <div class="px-6 py-4 border-b flex justify-between items-center">
+                                <h2 class="text-lg font-semibold">Resume</h2>
+                                <button @click="addResumeEntry()" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                                    Add Entry
+                                </button>
+                            </div>
+                            <div class="p-6">
+                                <template x-for="(entry, index) in data.resume" :key="index">
+                                    <div class="mb-4 p-4 border rounded">
+                                        <div class="flex items-center gap-2 mb-3">
+                                            <span x-text="entry.type === 'education' ? '🎓' : entry.type === 'awards' ? '🏆' : '💼'"></span>
+                                            <select x-model="entry.type" class="px-2 py-1 border rounded text-sm">
+                                                <option value="experience">Experience</option>
+                                                <option value="education">Education</option>
+                                                <option value="awards">Awards</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Experience Fields -->
+                                        <template x-if="entry.type === 'experience' || !entry.type">
+                                            <div>
+                                                <div class="grid grid-cols-2 gap-4 mb-2">
+                                                    <input type="text" x-model="entry.company" placeholder="Company" class="px-3 py-2 border rounded">
+                                                    <input type="text" x-model="entry.role" placeholder="Role" class="px-3 py-2 border rounded">
+                                                </div>
+                                            </div>
+                                        </template>
+                                        
+                                        <!-- Education Fields -->
+                                        <template x-if="entry.type === 'education'">
+                                            <div>
+                                                <div class="grid grid-cols-2 gap-4 mb-2">
+                                                    <input type="text" x-model="entry.school" placeholder="School/University" class="px-3 py-2 border rounded">
+                                                    <input type="text" x-model="entry.degree" placeholder="Degree/Program" class="px-3 py-2 border rounded">
+                                                </div>
+                                            </div>
+                                        </template>
+                                        
+                                        <!-- Awards Fields -->
+                                        <template x-if="entry.type === 'awards'">
+                                            <div>
+                                                <div class="grid grid-cols-2 gap-4 mb-2">
+                                                    <input type="text" x-model="entry.organization" placeholder="Organization" class="px-3 py-2 border rounded">
+                                                    <input type="text" x-model="entry.award" placeholder="Award Name" class="px-3 py-2 border rounded">
+                                                </div>
+                                            </div>
+                                        </template>
+                                        
+                                        <div class="grid grid-cols-2 gap-4 mb-2">
+                                            <input type="text" x-model="entry.start" placeholder="Start Date" class="px-3 py-2 border rounded">
+                                            <input type="text" x-model="entry.end" placeholder="End Date (or Present)" class="px-3 py-2 border rounded">
+                                        </div>
+                                        <textarea x-model="entry.summary" placeholder="Description/Summary" rows="2" class="w-full px-3 py-2 border rounded mb-2"></textarea>
+                                        <button @click="removeResumeEntry(index)" class="text-red-600 text-sm hover:underline">Remove</button>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow">
+                            <div class="px-6 py-4 border-b flex justify-between items-center">
+                                <h2 class="text-lg font-semibold">Projects</h2>
+                                <button @click="addProject()" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                                    Add Project
+                                </button>
+                            </div>
+                            <div class="p-6">
+                                <template x-for="(project, index) in data.projects" :key="index">
+                                    <div class="mb-4 p-4 border rounded">
+                                        <div class="flex items-start space-x-4">
+                                            <div class="flex-1">
+                                                <input type="text" x-model="project.name" placeholder="Project Name" class="w-full px-3 py-2 border rounded mb-2">
+                                                <textarea x-model="project.description" placeholder="Description" rows="2" class="w-full px-3 py-2 border rounded mb-2"></textarea>
+                                                <div class="grid grid-cols-2 gap-2">
+                                                    <input type="text" x-model="project.url" placeholder="Live URL" class="px-3 py-2 border rounded">
+                                                    <input type="text" x-model="project.source" placeholder="Source Code URL" class="px-3 py-2 border rounded">
+                                                </div>
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                <label class="block text-sm font-medium mb-1">Project Image</label>
+                                                <div class="w-32 h-24 border-2 border-dashed border-gray-300 rounded flex items-center justify-center cursor-pointer hover:border-blue-500" @click="selectImageFor('project', index)">
+                                                    <template x-if="project.image">
+                                                        <img :src="project.image" class="w-full h-full object-cover rounded">
+                                                    </template>
+                                                    <template x-if="!project.image">
+                                                        <span class="text-gray-400 text-xs">Click to select</span>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button @click="removeProject(index)" class="text-red-600 text-sm hover:underline mt-2">Remove</button>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow">
+                            <div class="px-6 py-4 border-b">
+                                <h2 class="text-lg font-semibold">Settings</h2>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" x-model="data.blogEnabled" class="mr-2">
+                                        <span>Enable Blog</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Light/Dark Mode</label>
+                                    <select x-model="data.theme" class="w-full px-3 py-2 border rounded">
+                                        <option value="system">System</option>
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Color Theme</label>
+                                    <select x-model="data.colorTheme" class="w-full px-3 py-2 border rounded">
+                                        <option value="ocean">Ocean Blue</option>
+                                        <option value="forest">Forest Green</option>
+                                        <option value="sunset">Sunset Orange</option>
+                                        <option value="purple">Royal Purple</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Media Library Tab -->
+                    <div x-show="activeTab === 'media'" class="bg-white rounded-lg shadow p-6">
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-4">Media Library</h2>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center"
+                                 @dragover.prevent="$event.currentTarget.classList.add('border-blue-400', 'bg-blue-50')"
+                                 @dragleave.prevent="$event.currentTarget.classList.remove('border-blue-400', 'bg-blue-50')"
+                                 @drop.prevent="handleDrop($event)">
+                                <input type="file" id="fileUpload" accept="image/*" class="hidden" @change="uploadImage($event)">
+                                <label for="fileUpload" class="cursor-pointer">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <p class="mt-2 text-sm text-gray-600">
+                                        <span class="font-medium text-blue-600 hover:text-blue-500">Click to upload</span> or drag and drop
+                                    </p>
+                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div x-show="uploading" class="mb-4 p-4 bg-blue-50 rounded">
+                            <div class="flex items-center">
+                                <svg class="animate-spin h-5 w-5 text-blue-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>Uploading...</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-4">
+                            <template x-for="image in images" :key="image.filename">
+                                <div class="relative group">
+                                    <img :src="image.thumbnailUrl || image.url" class="w-full h-32 object-cover rounded cursor-pointer" @click="selectImage(image.hqUrl || image.url)">
+                                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center">
+                                        <button @click="deleteImage(image.filename)" class="px-2 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Blog Tab -->
+                    <div x-show="activeTab === 'blog'" class="space-y-6">
+                        <div class="bg-white rounded-lg shadow">
+                            <div class="px-6 py-4 border-b flex justify-between items-center">
+                                <h2 class="text-lg font-semibold">Blog Posts</h2>
+                                <button @click="addBlogPost()" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                                    New Post
+                                </button>
+                            </div>
+                            <div class="p-6">
+                                <template x-for="(post, index) in data.blogPosts" :key="index">
+                                    <div class="mb-6 p-4 border rounded">
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div class="flex-1">
+                                                <input type="text" x-model="post.title" placeholder="Post Title" class="text-lg font-semibold w-full px-3 py-2 border rounded mb-2">
+                                                <input type="text" x-model="post.slug" placeholder="URL slug (e.g., my-first-post)" class="w-full px-3 py-2 border rounded mb-2 text-sm">
+                                            </div>
+                                            <div class="flex-shrink-0 ml-4">
+                                                <label class="block text-sm font-medium mb-1">Featured Image</label>
+                                                <div class="w-32 h-20 border-2 border-dashed border-gray-300 rounded flex items-center justify-center cursor-pointer hover:border-blue-500" @click="selectImageFor('blog', index)">
+                                                    <template x-if="post.featuredImage">
+                                                        <img :src="post.featuredImage" class="w-full h-full object-cover rounded">
+                                                    </template>
+                                                    <template x-if="!post.featuredImage">
+                                                        <span class="text-gray-400 text-xs">Click to select</span>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="grid grid-cols-3 gap-4 mb-4">
+                                            <div>
+                                                <label class="block text-sm font-medium mb-1">Date</label>
+                                                <input type="date" x-model="post.date" class="w-full px-3 py-2 border rounded">
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium mb-1">Status</label>
+                                                <select x-model="post.status" class="w-full px-3 py-2 border rounded">
+                                                    <option value="draft">Draft</option>
+                                                    <option value="published">Published</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm font-medium mb-1">Tags (comma separated)</label>
+                                                <input type="text" x-model="post.tagsString" placeholder="tech, tutorial, programming" class="w-full px-3 py-2 border rounded">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <label class="block text-sm font-medium mb-1">Excerpt</label>
+                                            <textarea x-model="post.excerpt" placeholder="A brief summary of the post..." rows="2" class="w-full px-3 py-2 border rounded"></textarea>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <label class="block text-sm font-medium mb-1">Content</label>
+                                            <textarea x-model="post.content" placeholder="Write your blog post content here..." rows="10" class="w-full px-3 py-2 border rounded font-mono text-sm"></textarea>
+                                            <div class="mt-2 text-xs text-gray-500">
+                                                You can use line breaks and basic formatting. HTML is supported.
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between">
+                                            <div class="text-sm text-gray-500">
+                                                ID: <span class="font-mono" x-text="post.id"></span>
+                                            </div>
+                                            <button @click="removeBlogPost(index)" class="text-red-600 text-sm hover:underline">
+                                                Delete Post
+                                            </button>
+                                        </div>
+                                    </div>
+                                </template>
+                                
+                                <template x-if="data.blogPosts.length === 0">
+                                    <div class="text-center text-gray-500 py-8">
+                                        <p>No blog posts yet. Create your first post!</p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Selector Modal -->
+                    <div x-show="showImageSelector" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+                        <div class="flex items-center justify-center min-h-screen px-4">
+                            <div class="fixed inset-0 bg-gray-500 bg-opacity-75" @click="showImageSelector = false"></div>
+                            <div class="relative bg-white rounded-lg max-w-3xl w-full p-6">
+                                <h3 class="text-lg font-semibold mb-4">Select an Image</h3>
+                                <div class="grid grid-cols-4 gap-4 max-h-96 overflow-y-auto">
+                                    <template x-for="image in images" :key="image.filename">
+                                        <img :src="image.thumbnailUrl || image.url" class="w-full h-24 object-cover rounded cursor-pointer hover:ring-2 hover:ring-blue-500" @click="confirmImageSelection(image.hqUrl || image.url)">
+                                    </template>
+                                </div>
+                                <div class="mt-4 flex justify-end">
+                                    <button @click="showImageSelector = false" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <script>
+        function adminApp() {
+            return {
+                data: {
+                    profile: {},
+                    resume: [],
+                    projects: [],
+                    blogPosts: []
+                },
+                showSetup: true,
+                activeTab: 'content',
+                images: [],
+                uploading: false,
+                showImageSelector: false,
+                imageSelectionTarget: null,
+                imageSelectionIndex: null,
+                setupAnswers: {
+                    name: '',
+                    title: '',
+                    bio: '',
+                    location: '',
+                    email: '',
+                    githubUsername: '',
+                    linkedInUsername: '',
+                    blogEnabled: false
+                },
+                
+                async init() {
+                    await this.loadData();
+                    await this.loadImages();
+                },
+                
+                async loadData() {
+                    try {
+                        const response = await fetch('/api/data');
+                        const data = await response.json();
+                        this.data = {
+                            ...data,
+                            profile: data.profile || {},
+                            resume: data.resume || [],
+                            projects: data.projects || [],
+                            blogPosts: (data.blogPosts || []).map(post => ({
+                                ...post,
+                                tagsString: post.tags ? post.tags.join(', ') : ''
+                            })),
+                            colorTheme: data.colorTheme || 'ocean'
+                        };
+                        this.showSetup = !this.data.setupCompleted;
+                    } catch (error) {
+                        console.error('Failed to load data:', error);
+                    }
+                },
+
+                async loadImages() {
+                    try {
+                        const response = await fetch('/api/images');
+                        this.images = await response.json();
+                    } catch (error) {
+                        console.error('Failed to load images:', error);
+                    }
+                },
+                
+                async saveData() {
+                    try {
+                        // Process blog posts before saving
+                        const processedData = { ...this.data };
+                        processedData.blogPosts = this.data.blogPosts.map(post => ({
+                            ...post,
+                            tags: post.tagsString ? post.tagsString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0) : []
+                        }));
+
+                        const response = await fetch('/api/data', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(processedData)
+                        });
+                        if (response.ok) {
+                            alert('Changes saved successfully!');
+                        } else {
+                            alert('Failed to save changes');
+                        }
+                    } catch (error) {
+                        console.error('Failed to save data:', error);
+                        alert('Failed to save changes');
+                    }
+                },
+
+                handleDrop(event) {
+                    event.currentTarget.classList.remove('border-blue-400', 'bg-blue-50');
+                    const files = event.dataTransfer.files;
+                    if (files.length > 0) {
+                        const file = files[0];
+                        if (file.type.startsWith('image/')) {
+                            // Create a fake event object for uploadImage
+                            const fakeEvent = { target: { files: [file] } };
+                            this.uploadImage(fakeEvent);
+                        }
+                    }
+                },
+
+                async uploadImage(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    this.uploading = true;
+                    const formData = new FormData();
+                    formData.append('image', file);
+
+                    try {
+                        const response = await fetch('/api/upload', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        if (response.ok) {
+                            const result = await response.json();
+                            await this.loadImages();
+                            event.target.value = '';
+                        } else {
+                            alert('Failed to upload image');
+                        }
+                    } catch (error) {
+                        console.error('Upload error:', error);
+                        alert('Failed to upload image');
+                    } finally {
+                        this.uploading = false;
+                    }
+                },
+
+                async deleteImage(filename) {
+                    if (!confirm('Are you sure you want to delete this image?')) return;
+
+                    try {
+                        const response = await fetch(`/api/images/${filename}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (response.ok) {
+                            await this.loadImages();
+                        } else {
+                            alert('Failed to delete image');
+                        }
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        alert('Failed to delete image');
+                    }
+                },
+
+                selectImageFor(target, index = null) {
+                    this.imageSelectionTarget = target;
+                    this.imageSelectionIndex = index;
+                    this.showImageSelector = true;
+                },
+
+                confirmImageSelection(url) {
+                    if (this.imageSelectionTarget === 'profile') {
+                        this.data.profile.photo = url;
+                    } else if (this.imageSelectionTarget === 'project' && this.imageSelectionIndex !== null) {
+                        this.data.projects[this.imageSelectionIndex].image = url;
+                    } else if (this.imageSelectionTarget === 'blog' && this.imageSelectionIndex !== null) {
+                        this.data.blogPosts[this.imageSelectionIndex].featuredImage = url;
+                    }
+                    this.showImageSelector = false;
+                    this.imageSelectionTarget = null;
+                    this.imageSelectionIndex = null;
+                },
+
+                selectImage(url) {
+                    if (this.imageSelectionTarget) {
+                        this.confirmImageSelection(url);
+                    }
+                },
+                
+                async completeSetup() {
+                    const setupData = {
+                        profile: {
+                            name: this.setupAnswers.name,
+                            title: this.setupAnswers.title,
+                            bio: this.setupAnswers.bio,
+                            location: this.setupAnswers.location,
+                            email: this.setupAnswers.email,
+                            githubUsername: this.setupAnswers.githubUsername,
+                            linkedInUsername: this.setupAnswers.linkedInUsername
+                        },
+                        blogEnabled: this.setupAnswers.blogEnabled === 'true',
+                        resume: [],
+                        projects: []
+                    };
+                    
+                    try {
+                        const response = await fetch('/api/setup', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(setupData)
+                        });
+                        if (response.ok) {
+                            await this.loadData();
+                            this.showSetup = false;
+                        } else {
+                            alert('Failed to complete setup');
+                        }
+                    } catch (error) {
+                        console.error('Failed to complete setup:', error);
+                        alert('Failed to complete setup');
+                    }
+                },
+                
+                addResumeEntry() {
+                    this.data.resume.push({
+                        type: 'experience',
+                        company: '',
+                        role: '',
+                        start: '',
+                        end: '',
+                        summary: '',
+                        school: '',
+                        degree: '',
+                        organization: '',
+                        award: ''
+                    });
+                },
+                
+                removeResumeEntry(index) {
+                    this.data.resume.splice(index, 1);
+                },
+                
+                addProject() {
+                    this.data.projects.push({
+                        name: '',
+                        description: '',
+                        image: '',
+                        url: '',
+                        source: ''
+                    });
+                },
+                
+                removeProject(index) {
+                    this.data.projects.splice(index, 1);
+                },
+
+                addBlogPost() {
+                    const now = new Date();
+                    const dateStr = now.toISOString().split('T')[0];
+                    const id = 'post-' + Date.now();
+                    
+                    this.data.blogPosts.push({
+                        id: id,
+                        title: '',
+                        slug: '',
+                        date: dateStr,
+                        excerpt: '',
+                        content: '',
+                        tags: [],
+                        tagsString: '',
+                        status: 'draft',
+                        featuredImage: ''
+                    });
+                },
+
+                removeBlogPost(index) {
+                    if (confirm('Are you sure you want to delete this blog post?')) {
+                        this.data.blogPosts.splice(index, 1);
+                    }
+                }
+            }
+        }
+
+        // Alpine.js is handling all the functionality
+    </script>
+</body>
+</html>

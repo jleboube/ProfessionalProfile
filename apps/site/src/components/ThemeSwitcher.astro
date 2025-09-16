@@ -1,0 +1,247 @@
+---
+interface Props {
+  colorTheme: string;
+}
+
+const { colorTheme } = Astro.props;
+---
+
+<div class="fixed top-4 right-4 z-50 flex flex-col gap-2">
+  <!-- Light/Dark Toggle -->
+  <button
+    id="theme-toggle"
+    type="button"
+    class="p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 transition-all shadow-lg"
+    aria-label="Toggle theme"
+  >
+    <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+    </svg>
+    <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+    </svg>
+  </button>
+
+  <!-- Color Theme Selector -->
+  <div class="relative">
+    <button
+      id="color-theme-toggle"
+      class="p-2 rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-800 transition-all shadow-lg"
+      aria-label="Select color theme"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
+      </svg>
+    </button>
+    
+    <div 
+      id="color-theme-menu"
+      class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden hidden"
+    >
+      <div class="p-2">
+        <div class="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-1 mb-1">Color Themes</div>
+        <button
+          onclick="setColorTheme('ocean')"
+          class="w-full flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          id="theme-ocean"
+        >
+          <div class="w-4 h-4 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400"></div>
+          <span>Ocean Blue</span>
+        </button>
+        <button
+          onclick="setColorTheme('forest')"
+          class="w-full flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          id="theme-forest"
+        >
+          <div class="w-4 h-4 rounded-full bg-gradient-to-r from-green-400 to-emerald-400"></div>
+          <span>Forest Green</span>
+        </button>
+        <button
+          onclick="setColorTheme('sunset')"
+          class="w-full flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          id="theme-sunset"
+        >
+          <div class="w-4 h-4 rounded-full bg-gradient-to-r from-orange-400 to-yellow-400"></div>
+          <span>Sunset Orange</span>
+        </button>
+        <button
+          onclick="setColorTheme('purple')"
+          class="w-full flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          id="theme-purple"
+        >
+          <div class="w-4 h-4 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"></div>
+          <span>Royal Purple</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ colorTheme }}>
+  let currentColorTheme = colorTheme || 'ocean';
+
+  const toggle = document.getElementById('theme-toggle');
+  const colorToggle = document.getElementById('color-theme-toggle');
+  const colorMenu = document.getElementById('color-theme-menu');
+  
+  function getTheme() {
+    return localStorage.getItem('theme') || 'system';
+  }
+  
+  function setTheme(theme) {
+    localStorage.setItem('theme', theme);
+    applyTheme(theme);
+  }
+  
+  function applyTheme(theme) {
+    const isDark = theme === 'dark' || 
+      (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }
+
+  function getColorTheme() {
+    return localStorage.getItem('colorTheme') || currentColorTheme;
+  }
+
+  function setColorTheme(theme) {
+    console.log('Setting color theme to:', theme);
+    currentColorTheme = theme;
+    localStorage.setItem('colorTheme', theme);
+    applyColorTheme(theme);
+    updateActiveTheme(theme);
+    colorMenu.classList.add('hidden');
+  }
+
+  function updateActiveTheme(theme) {
+    // Remove active state from all theme buttons
+    ['ocean', 'forest', 'sunset', 'purple'].forEach(t => {
+      const btn = document.getElementById(`theme-${t}`);
+      if (btn) {
+        btn.classList.remove('bg-blue-50', 'dark:bg-blue-900/20', 'bg-green-50', 'dark:bg-green-900/20', 'bg-orange-50', 'dark:bg-orange-900/20', 'bg-purple-50', 'dark:bg-purple-900/20');
+      }
+    });
+    
+    // Add active state to current theme
+    const activeBtn = document.getElementById(`theme-${theme}`);
+    if (activeBtn) {
+      if (theme === 'ocean') {
+        activeBtn.classList.add('bg-blue-50', 'dark:bg-blue-900/20');
+      } else if (theme === 'forest') {
+        activeBtn.classList.add('bg-green-50', 'dark:bg-green-900/20');
+      } else if (theme === 'sunset') {
+        activeBtn.classList.add('bg-orange-50', 'dark:bg-orange-900/20');
+      } else if (theme === 'purple') {
+        activeBtn.classList.add('bg-purple-50', 'dark:bg-purple-900/20');
+      }
+    }
+  }
+
+  function applyColorTheme(theme) {
+    console.log('Applying color theme:', theme);
+    
+    // Update CSS custom properties for the theme
+    const root = document.documentElement;
+    const themes = {
+      ocean: {
+        '--color-primary-50': '#f0f9ff',
+        '--color-primary-100': '#e0f2fe',
+        '--color-primary-200': '#bae6fd',
+        '--color-primary-300': '#7dd3fc',
+        '--color-primary-400': '#38bdf8',
+        '--color-primary-500': '#0ea5e9',
+        '--color-primary-600': '#0284c7',
+        '--color-primary-700': '#0369a1',
+        '--color-primary-800': '#075985',
+        '--color-primary-900': '#0c4a6e',
+        '--color-primary-950': '#082f49',
+      },
+      forest: {
+        '--color-primary-50': '#f0fdf4',
+        '--color-primary-100': '#dcfce7',
+        '--color-primary-200': '#bbf7d0',
+        '--color-primary-300': '#86efac',
+        '--color-primary-400': '#4ade80',
+        '--color-primary-500': '#22c55e',
+        '--color-primary-600': '#16a34a',
+        '--color-primary-700': '#15803d',
+        '--color-primary-800': '#166534',
+        '--color-primary-900': '#14532d',
+        '--color-primary-950': '#052e16',
+      },
+      sunset: {
+        '--color-primary-50': '#fefce8',
+        '--color-primary-100': '#fef3c7',
+        '--color-primary-200': '#fde68a',
+        '--color-primary-300': '#fcd34d',
+        '--color-primary-400': '#fbbf24',
+        '--color-primary-500': '#f59e0b',
+        '--color-primary-600': '#d97706',
+        '--color-primary-700': '#b45309',
+        '--color-primary-800': '#92400e',
+        '--color-primary-900': '#78350f',
+        '--color-primary-950': '#451a03',
+      },
+      purple: {
+        '--color-primary-50': '#faf5ff',
+        '--color-primary-100': '#f3e8ff',
+        '--color-primary-200': '#e9d5ff',
+        '--color-primary-300': '#d8b4fe',
+        '--color-primary-400': '#c084fc',
+        '--color-primary-500': '#a855f7',
+        '--color-primary-600': '#9333ea',
+        '--color-primary-700': '#7c3aed',
+        '--color-primary-800': '#6b21a8',
+        '--color-primary-900': '#581c87',
+        '--color-primary-950': '#3b0764',
+      }
+    };
+
+    const colors = themes[theme];
+    if (colors) {
+      Object.entries(colors).forEach(([prop, value]) => {
+        root.style.setProperty(prop, value);
+      });
+    }
+  }
+  
+  // Initialize themes
+  document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(getTheme());
+    const savedTheme = getColorTheme();
+    applyColorTheme(savedTheme);
+    updateActiveTheme(savedTheme);
+  });
+  
+  // Toggle light/dark mode
+  toggle?.addEventListener('click', () => {
+    const current = getTheme();
+    const next = current === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+  });
+
+  // Toggle color theme menu
+  colorToggle?.addEventListener('click', () => {
+    colorMenu.classList.toggle('hidden');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!colorToggle.contains(e.target) && !colorMenu.contains(e.target)) {
+      colorMenu.classList.add('hidden');
+    }
+  });
+  
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (getTheme() === 'system') {
+      applyTheme('system');
+    }
+  });
+
+  // Make function available globally
+  window.setColorTheme = setColorTheme;
+</script>

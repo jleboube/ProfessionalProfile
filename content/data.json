@@ -1,0 +1,33 @@
+{
+  "setupCompleted": false,
+  "profile": {
+    "name": "",
+    "title": "",
+    "bio": "",
+    "location": "",
+    "email": "",
+    "githubUsername": ""
+  },
+  "theme": "system",
+  "resume": [
+    {
+      "company": "",
+      "role": "",
+      "start": "",
+      "end": "",
+      "summary": ""
+    }
+  ],
+  "projects": [
+    {
+      "name": "",
+      "description": "",
+      "image": "",
+      "url": "",
+      "source": ""
+    }
+  ],
+  "blogEnabled": false,
+  "blogPosts": []
+}
+

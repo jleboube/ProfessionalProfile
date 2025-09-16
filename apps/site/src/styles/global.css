@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    @apply transition-colors duration-200;
+    
+    /* Default ocean theme colors */
+    --color-primary-50: #f0f9ff;
+    --color-primary-100: #e0f2fe;
+    --color-primary-200: #bae6fd;
+    --color-primary-300: #7dd3fc;
+    --color-primary-400: #38bdf8;
+    --color-primary-500: #0ea5e9;
+    --color-primary-600: #0284c7;
+    --color-primary-700: #0369a1;
+    --color-primary-800: #075985;
+    --color-primary-900: #0c4a6e;
+    --color-primary-950: #082f49;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100;
+  }
+
+  /* Override Tailwind's primary colors with CSS custom properties */
+  .bg-primary-50 { background-color: var(--color-primary-50) !important; }
+  .bg-primary-100 { background-color: var(--color-primary-100) !important; }
+  .bg-primary-200 { background-color: var(--color-primary-200) !important; }
+  .bg-primary-300 { background-color: var(--color-primary-300) !important; }
+  .bg-primary-400 { background-color: var(--color-primary-400) !important; }
+  .bg-primary-500 { background-color: var(--color-primary-500) !important; }
+  .bg-primary-600 { background-color: var(--color-primary-600) !important; }
+  .bg-primary-700 { background-color: var(--color-primary-700) !important; }
+  .bg-primary-800 { background-color: var(--color-primary-800) !important; }
+  .bg-primary-900 { background-color: var(--color-primary-900) !important; }
+  .bg-primary-950 { background-color: var(--color-primary-950) !important; }
+  
+  .text-primary-50 { color: var(--color-primary-50) !important; }
+  .text-primary-100 { color: var(--color-primary-100) !important; }
+  .text-primary-200 { color: var(--color-primary-200) !important; }
+  .text-primary-300 { color: var(--color-primary-300) !important; }
+  .text-primary-400 { color: var(--color-primary-400) !important; }
+  .text-primary-500 { color: var(--color-primary-500) !important; }
+  .text-primary-600 { color: var(--color-primary-600) !important; }
+  .text-primary-700 { color: var(--color-primary-700) !important; }
+  .text-primary-800 { color: var(--color-primary-800) !important; }
+  .text-primary-900 { color: var(--color-primary-900) !important; }
+  .text-primary-950 { color: var(--color-primary-950) !important; }
+  
+  .border-primary-50 { border-color: var(--color-primary-50) !important; }
+  .border-primary-100 { border-color: var(--color-primary-100) !important; }
+  .border-primary-200 { border-color: var(--color-primary-200) !important; }
+  .border-primary-300 { border-color: var(--color-primary-300) !important; }
+  .border-primary-400 { border-color: var(--color-primary-400) !important; }
+  .border-primary-500 { border-color: var(--color-primary-500) !important; }
+  .border-primary-600 { border-color: var(--color-primary-600) !important; }
+  .border-primary-700 { border-color: var(--color-primary-700) !important; }
+  .border-primary-800 { border-color: var(--color-primary-800) !important; }
+  .border-primary-900 { border-color: var(--color-primary-900) !important; }
+  .border-primary-950 { border-color: var(--color-primary-950) !important; }
+
+  .ring-primary-50 { --tw-ring-color: var(--color-primary-50) !important; }
+  .ring-primary-100 { --tw-ring-color: var(--color-primary-100) !important; }
+  .ring-primary-200 { --tw-ring-color: var(--color-primary-200) !important; }
+  .ring-primary-300 { --tw-ring-color: var(--color-primary-300) !important; }
+  .ring-primary-400 { --tw-ring-color: var(--color-primary-400) !important; }
+  .ring-primary-500 { --tw-ring-color: var(--color-primary-500) !important; }
+  .ring-primary-600 { --tw-ring-color: var(--color-primary-600) !important; }
+  .ring-primary-700 { --tw-ring-color: var(--color-primary-700) !important; }
+  .ring-primary-800 { --tw-ring-color: var(--color-primary-800) !important; }
+  .ring-primary-900 { --tw-ring-color: var(--color-primary-900) !important; }
+  .ring-primary-950 { --tw-ring-color: var(--color-primary-950) !important; }
+
+  .hover\:bg-primary-50:hover { background-color: var(--color-primary-50) !important; }
+  .hover\:bg-primary-100:hover { background-color: var(--color-primary-100) !important; }
+  .hover\:bg-primary-700:hover { background-color: var(--color-primary-700) !important; }
+  .hover\:bg-primary-950:hover { background-color: var(--color-primary-950) !important; }
+  
+  .hover\:text-primary-300:hover { color: var(--color-primary-300) !important; }
+  .hover\:text-primary-700:hover { color: var(--color-primary-700) !important; }
+
+  .dark .dark\:bg-primary-950 { background-color: var(--color-primary-950) !important; }
+  .dark .dark\:text-primary-400 { color: var(--color-primary-400) !important; }
+  .dark .dark\:text-primary-300 { color: var(--color-primary-300) !important; }
+  .dark .dark\:ring-primary-900 { --tw-ring-color: var(--color-primary-900) !important; }
+  .dark .dark\:hover\:bg-primary-950:hover { background-color: var(--color-primary-950) !important; }
+  .dark .dark\:hover\:text-primary-300:hover { color: var(--color-primary-300) !important; }
+
+  /* Additional gradient support */
+  .bg-gradient-to-r.from-primary-600.to-primary-400 {
+    background-image: linear-gradient(to right, var(--color-primary-600), var(--color-primary-400)) !important;
+  }
+}

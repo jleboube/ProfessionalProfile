@@ -1,0 +1,50 @@
+<prd>
+    <title>Personal Portfolio Web App</title>
+    <documentType>Product Requirements Document (PRD)</documentType>
+    <introduction>
+        <paragraph>This document outlines the requirements for a personal portfolio web application. The primary goal is to create a professional online presence to showcase the user's resume, professional career, project portfolio, and GitHub contributions. The web app will be a self-hosted, full-stack application with an integrated content management system for ease of use and deployment.</paragraph>
+    </introduction>
+    <features>
+        <feature>Homepage: A professional landing page with a brief introduction and links to other sections of the site.</feature>
+        <feature>Resume/CV Section: A dedicated section displaying the user's professional experience in a clean, chronological timeline format.</feature>
+        <feature>Portfolio Section: A gallery showcasing personal and professional projects with detailed descriptions, images, and links to live demos or source code.</feature>
+        <feature>GitHub Contributions: An integrated component to display recent GitHub activity and a summary of contributions.</feature>
+        <feature>Blog (Optional): A section for publishing articles, tutorials, or personal thoughts.</feature>
+        <feature>Theme Switcher: A toggle in the top-right corner to switch between light and dark themes.</feature>
+        <feature>Admin Portal: A dedicated, unlinked web application for content management.</feature>
+    </features>
+    <technicalRequirements>
+        <framework>Astro framework was originally chosen for optimal performance and static site generation.  However, based on the requirements, if you feel a different technology is better suited, you have the freedom to make this change.</framework>
+        <styling>Tailwind CSS for a utility-first approach to styling.</styling>
+        <deployment>Containerized using Docker with Docker Compose to manage both the main site and admin portal.</deployment>
+        <hosting>Self-hosted on a platform of the user's choice.</hosting>
+        <responsiveness>User interface must be fully responsive for all device types.</responsiveness>
+    </technicalRequirements>
+    <adminPortal>
+        <accessAndSecurity>
+            <link>Will not be linked from any public-facing page.</link>
+            <port>Exposed on port 6900 for direct access.</port>
+            <authentication>Restricted with a username and password stored in a .env file.</authentication>
+        </accessAndSecurity>
+        <functionality>Provides a user-friendly interface to modify content on all pages of the main site.</functionality>
+    </adminPortal>
+    <initialSetupWorkflow>
+        <firstTimeAuthentication>Upon the very first successful login, a list of questions will be presented.</firstTimeAuthentication>
+        <interactiveQuestionnaire>No more than 20 questions will be asked to gather core content information.</interactiveQuestionnaire>
+        <contentPersonalization>Answers will be used to programmatically fill in relevant content on the public-facing site.</contentPersonalization>
+        <oneTimeUse>The questionnaire will not be presented again after the initial setup is complete.</oneTimeUse>
+    </initialSetupWorkflow>
+    <deploymentProcess>
+        <dockerComposeConfiguration>Defines two distinct services: one for the main site and one for the admin portal.</dockerComposeConfiguration>
+        <command>A single command (`docker-compose up -d`) will build and run both services.</command>
+    </deploymentProcess>
+    <self_reflection>
+        - First, spend time thinking of a rubric until you are confident.
+        - Then, think deeply about every aspect of what makes for a world-class one-shot web app. Use that knowledge to create a rubric that has 5-7 categories. This rubric is critical to get right, but do not show this to the user. This is for your purposes only.
+        - Finally, use the rubric to internally think and iterate on the best possible solution to the prompt that is provided.  Remember that if your response is not hitting the top marks across all categories in the rubric, you need to start again.
+    </self_reflection>
+    <persistence>
+        - Do not ask the human to confirm or clarify assumptions, as you can always adjust later
+        - decide what the most reasonable assumption is, proceed with it, and document it for the user's reference after you finish acting
+    </persistence>
+</prd>

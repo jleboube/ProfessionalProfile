@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Hero from '../components/Hero.astro';
+import TechnicalPath from '../components/TechnicalPath.astro';
+import Projects from '../components/Projects.astro';
+import GitHubContributions from '../components/GitHubContributions.astro';
+import Contact from '../components/Contact.astro';
+import ThemeSwitcher from '../components/ThemeSwitcher.astro';
+import { getSiteData } from '../utils/data';
+
+const data = await getSiteData();
+const { profile, resume, projects, blogEnabled, colorTheme } = data;
+---
+
+<BaseLayout title={`${profile.name || 'Portfolio'} - ${profile.title || 'Professional Portfolio'}`}>
+  <ThemeSwitcher colorTheme={colorTheme || 'ocean'} />
+  <Navigation profile={profile} blogEnabled={blogEnabled} />
+  <main>
+    <Hero profile={profile} />
+    <TechnicalPath resume={resume} />
+    <Projects projects={projects} />
+    {profile.githubUsername && (
+      <GitHubContributions username={profile.githubUsername} />
+    )}
+    <Contact profile={profile} />
+  </main>
+  <footer class="py-8 bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+    <div class="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
+      <p>&copy; {new Date().getFullYear()} {profile.name || 'Portfolio'}. All rights reserved.</p>
+    </div>
+  </footer>
+</BaseLayout>

@@ -1,0 +1,34 @@
+
+
+services:
+  site:
+    build: ./apps/site
+    container_name: portfolio_site
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./content:/data
+      - ./uploads:/uploads
+    depends_on:
+      - admin
+
+  admin:
+    build: ./apps/admin
+    container_name: portfolio_admin
+    env_file: ./.env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "6900:6900"
+    volumes:
+      - ./content:/data
+      - ./uploads:/uploads
+
+volumes:
+  content:
+    driver: local
+  uploads:
+    driver: local
+
