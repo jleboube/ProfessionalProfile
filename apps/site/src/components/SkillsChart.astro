@@ -1,0 +1,122 @@
+---
+import type { Skill } from '../utils/data';
+
+interface Props {
+  skills: Skill[];
+}
+
+const { skills = [] } = Astro.props;
+
+// Group skills by category (with safety check)
+const technicalSkills = (skills || []).filter(skill => skill.category === 'technical');
+const professionalSkills = (skills || []).filter(skill => skill.category === 'professional');
+
+// Sort skills by level (descending)
+const sortedTechnical = technicalSkills.sort((a, b) => b.level - a.level);
+const sortedProfessional = professionalSkills.sort((a, b) => b.level - a.level);
+---
+
+{skills && skills.length > 0 && (
+  <section id="skills" class="py-20 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-4xl font-bold text-center mb-12">Skills & Expertise</h2>
+        
+        <div class="grid lg:grid-cols-2 gap-12">
+          {sortedTechnical.length > 0 && (
+            <div>
+              <h3 class="text-2xl font-bold mb-6">Technical Skills</h3>
+              <div class="space-y-4">
+                {sortedTechnical.map((skill) => (
+                  <div class="skill-item">
+                    <div class="flex justify-between items-center mb-2">
+                      <span class="text-lg font-medium">{skill.name}</span>
+                      <span class="text-sm text-gray-600 dark:text-gray-300">{skill.level}%</span>
+                    </div>
+                    <div class="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2">
+                      <div 
+                        class="skill-bar h-2 rounded-full transition-all duration-1000"
+                        style={`width: ${skill.level}%; background: linear-gradient(to right, var(--color-primary-500), var(--color-primary-400));`}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {sortedProfessional.length > 0 && (
+            <div>
+              <h3 class="text-2xl font-bold mb-6">Professional Skills</h3>
+              <div class="space-y-4">
+                {sortedProfessional.map((skill) => (
+                  <div class="skill-item">
+                    <div class="flex justify-between items-center mb-2">
+                      <span class="text-lg font-medium">{skill.name}</span>
+                      <span class="text-sm text-gray-600 dark:text-gray-300">{skill.level}%</span>
+                    </div>
+                    <div class="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-2">
+                      <div 
+                        class="skill-bar h-2 rounded-full transition-all duration-1000"
+                        style={`width: ${skill.level}%; background: linear-gradient(to right, var(--color-primary-500), var(--color-primary-400));`}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  // Animate skill bars on scroll
+  const observeSkillBars = () => {
+    const skillBars = document.querySelectorAll('.skill-bar');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const bar = entry.target as HTMLElement;
+          const width = bar.style.width;
+          bar.style.width = '0%';
+          setTimeout(() => {
+            bar.style.width = width;
+          }, 100);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    skillBars.forEach(bar => observer.observe(bar));
+  };
+  
+  // Run on page load
+  document.addEventListener('DOMContentLoaded', observeSkillBars);
+  
+  // Also run on view transitions (for SPA-like navigation)
+  document.addEventListener('astro:page-load', observeSkillBars);
+</script>
+
+<style>
+  .skill-item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s ease-out forwards;
+  }
+  
+  .skill-item:nth-child(2) { animation-delay: 0.1s; }
+  .skill-item:nth-child(3) { animation-delay: 0.2s; }
+  .skill-item:nth-child(4) { animation-delay: 0.3s; }
+  .skill-item:nth-child(5) { animation-delay: 0.4s; }
+  .skill-item:nth-child(6) { animation-delay: 0.5s; }
+  
+  @keyframes slideUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

@@ -32,8 +32,45 @@ function generateTechnicalSummary(resume: ResumeEntry[]) {
   const currentRole = experience.find(entry => !entry.end || entry.end.toLowerCase().includes('present'))?.role || 
                      experience[0]?.role || 'Professional';
   
-  // Count companies worked at
-  const companiesCount = new Set(experience.map(entry => entry.company).filter(Boolean)).size;
+  // Sort ALL experience entries by start date (oldest first)
+  const sortedExperience = experience
+    .filter(entry => entry.company && entry.start)
+    .sort((a, b) => {
+      // Parse dates more thoroughly - handle "February 1998", "April 2022", etc.
+      const parseYear = (dateStr) => {
+        if (!dateStr) return 9999;
+        // Extract year from various formats
+        const match = dateStr.match(/(\d{4})/);
+        return match ? parseInt(match[1]) : 9999;
+      };
+      
+      const yearA = parseYear(a.start);
+      const yearB = parseYear(b.start);
+      
+      console.log(`Comparing: ${a.company} (${a.start} -> ${yearA}) vs ${b.company} (${b.start} -> ${yearB})`);
+      
+      return yearA - yearB; // Oldest first: 1998 before 2022
+    });
+  
+  console.log('Debug: Sorted experiences:', sortedExperience.map(e => `${e.company} (${e.start}-${e.end || 'Present'})`));
+  
+  // Get unique companies in chronological order based on when they first appear
+  const uniqueCompanies = [];
+  const seen = new Set();
+  for (const entry of sortedExperience) {
+    if (!seen.has(entry.company)) {
+      uniqueCompanies.push(entry.company);
+      seen.add(entry.company);
+    }
+  }
+  const companiesCount = uniqueCompanies.length;
+  
+  console.log('Debug: Final company order:', uniqueCompanies);
+  
+  // If the order is still wrong, uncomment this line to reverse it:
+  // uniqueCompanies.reverse();
+  
+  console.log('Debug: Final order after any reversal:', uniqueCompanies);
   
   // Get education summary
   const educationSummary = education.length > 0 ? 
@@ -46,6 +83,7 @@ function generateTechnicalSummary(resume: ResumeEntry[]) {
     yearsOfExperience,
     currentRole,
     companiesCount,
+    companiesList: uniqueCompanies,
     educationSummary,
     recentAchievements,
     totalExperiences: experience.length,
@@ -66,9 +104,9 @@ const summary = generateTechnicalSummary(resume);
       </p>
       
       {resume.length > 0 ? (
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div class="flex flex-wrap justify-center gap-8 mb-12">
           {summary.yearsOfExperience > 0 && (
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-64">
               <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
                 {summary.yearsOfExperience}+
               </div>
@@ -79,7 +117,7 @@ const summary = generateTechnicalSummary(resume);
           )}
           
           {summary.companiesCount > 0 && (
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-64">
               <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
                 {summary.companiesCount}
               </div>
@@ -90,7 +128,7 @@ const summary = generateTechnicalSummary(resume);
           )}
           
           {summary.totalAwards > 0 && (
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-64">
               <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
                 {summary.totalAwards}
               </div>
@@ -105,10 +143,27 @@ const summary = generateTechnicalSummary(resume);
           <h3 class="text-2xl font-semibold mb-4">Current Focus</h3>
           <p class="text-lg text-gray-600 dark:text-gray-300 mb-4">
             Currently working as <span class="font-semibold text-primary-600 dark:text-primary-400">{summary.currentRole}</span>
-            {summary.companiesCount > 1 && (
-              <span>, having contributed to {summary.companiesCount} different organizations</span>
-            )}
           </p>
+          
+          {summary.companiesList.length > 0 && (
+            <div class="mb-4">
+              <h4 class="text-lg font-semibold mb-2">Professional Journey:</h4>
+              <div class="flex flex-wrap gap-2">
+                {summary.companiesList.map((company, index) => (
+                  <span class="inline-flex items-center">
+                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-sm font-medium">
+                      {company}
+                    </span>
+                    {index < summary.companiesList.length - 1 && (
+                      <svg class="w-4 h-4 mx-2 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    )}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
           
           {summary.educationSummary && (
             <p class="text-gray-600 dark:text-gray-300 mb-4">
@@ -117,9 +172,9 @@ const summary = generateTechnicalSummary(resume);
           )}
           
           {summary.recentAchievements.length > 0 && (
-            <div class="mt-4">
+            <div class="mt-4 text-center">
               <h4 class="font-semibold mb-2">Recent Achievements:</h4>
-              <ul class="text-left text-gray-600 dark:text-gray-300">
+              <ul class="text-center text-gray-600 dark:text-gray-300">
                 {summary.recentAchievements.map(achievement => (
                   <li class="mb-1">🏆 {achievement.award || achievement.role} at {achievement.organization || achievement.company}</li>
                 ))}

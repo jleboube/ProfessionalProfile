@@ -25,7 +25,7 @@
                         <button @click="activeTab = 'media'" :class="activeTab === 'media' ? 'text-blue-600' : 'text-gray-600'" class="px-3 py-2">
                             Media Library
                         </button>
-                        <button @click="saveData()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
                             Save Changes
                         </button>
                     </div>
@@ -73,6 +73,111 @@
                                 <option value="true">Yes</option>
                             </select>
                         </div>
+                        
+                        <!-- Resume Upload Section -->
+                        <div class="border-t pt-4">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2">Upload Resume (Optional)</label>
+                                <p class="text-sm text-gray-600 mb-3">Upload your resume to automatically populate your profile and experience information. We support PDF and DOCX files.</p>
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center" 
+                                     :class="{'border-blue-400 bg-blue-50': resumeUploading, 'border-green-400 bg-green-50': resumeParsed}">
+                                    <input type="file" id="resumeUpload" accept=".pdf,.docx" class="hidden" @change="uploadResume($event)">
+                                    <template x-if="!resumeUploading && !resumeParsed">
+                                        <label for="resumeUpload" class="cursor-pointer">
+                                            <svg class="mx-auto h-8 w-8 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                            <span class="font-medium text-blue-600 hover:text-blue-500">Click to upload resume</span>
+                                            <p class="text-xs text-gray-500 mt-1">PDF or DOCX, up to 10MB</p>
+                                        </label>
+                                    </template>
+                                    <template x-if="resumeUploading">
+                                        <div class="flex items-center justify-center">
+                                            <svg class="animate-spin h-5 w-5 text-blue-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            <span>Parsing resume...</span>
+                                        </div>
+                                    </template>
+                                    <template x-if="resumeParsed && !resumeUploading">
+                                        <div class="text-green-600">
+                                            <svg class="mx-auto h-8 w-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <span>Resume parsed successfully!</span>
+                                            <button @click="resumeParsed = false; resumeData = null" class="ml-2 text-sm underline">Upload different resume</button>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                            
+                            <!-- Resume Review Section -->
+                            <template x-if="resumeParsed && resumeData">
+                                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                                    <h4 class="font-medium mb-3">Review Parsed Information</h4>
+                                    <p class="text-sm text-gray-600 mb-4">Please review and edit the information we extracted from your resume:</p>
+                                    
+                                    <div class="space-y-4">
+                                        <!-- Profile Information Preview -->
+                                        <div>
+                                            <h5 class="font-medium text-sm mb-2">Profile Information:</h5>
+                                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                                <div x-show="resumeData.profile.name">
+                                                    <strong>Name:</strong> <span x-text="resumeData.profile.name"></span>
+                                                </div>
+                                                <div x-show="resumeData.profile.email">
+                                                    <strong>Email:</strong> <span x-text="resumeData.profile.email"></span>
+                                                </div>
+                                                <div x-show="resumeData.profile.location">
+                                                    <strong>Location:</strong> <span x-text="resumeData.profile.location"></span>
+                                                </div>
+                                                <div x-show="resumeData.profile.phone">
+                                                    <strong>Phone:</strong> <span x-text="resumeData.profile.phone"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Experience Preview -->
+                                        <div x-show="resumeData.experience && resumeData.experience.length > 0">
+                                            <h5 class="font-medium text-sm mb-2">Experience (<span x-text="resumeData.experience.length"></span> entries found):</h5>
+                                            <div class="max-h-32 overflow-y-auto">
+                                                <template x-for="exp in resumeData.experience.slice(0, 3)">
+                                                    <div class="text-sm mb-2 pl-2 border-l-2 border-blue-200">
+                                                        <strong x-text="exp.role"></strong> at <span x-text="exp.company"></span>
+                                                        <div class="text-gray-600" x-text="`${exp.start} - ${exp.end || 'Present'}`"></div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Education Preview -->
+                                        <div x-show="resumeData.education && resumeData.education.length > 0">
+                                            <h5 class="font-medium text-sm mb-2">Education (<span x-text="resumeData.education.length"></span> entries found):</h5>
+                                            <template x-for="edu in resumeData.education.slice(0, 2)">
+                                                <div class="text-sm mb-1" x-text="edu.degree || edu.school"></div>
+                                            </template>
+                                        </div>
+                                        
+                                        <!-- Awards Preview -->
+                                        <div x-show="resumeData.awards && resumeData.awards.length > 0">
+                                            <h5 class="font-medium text-sm mb-2">Awards (<span x-text="resumeData.awards.length"></span> found):</h5>
+                                            <template x-for="award in resumeData.awards">
+                                                <div class="text-sm mb-1" x-text="award.award"></div>
+                                            </template>
+                                        </div>
+                                        
+                                        <div class="flex justify-between items-center pt-2 border-t">
+                                            <span class="text-sm text-gray-600">This information will be imported when you complete setup.</span>
+                                            <button @click="useResumeData()" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                                                Apply to Form
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        
                         <button @click="completeSetup()" class="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
                             Complete Setup
                         </button>
@@ -135,6 +240,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="px-6 py-4 border-t bg-gray-50">
+                                <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                    Save Changes
+                                </button>
+                            </div>
                         </div>
 
                         <div class="bg-white rounded-lg shadow">
@@ -195,6 +305,11 @@
                                     </div>
                                 </template>
                             </div>
+                            <div class="px-6 py-4 border-t bg-gray-50">
+                                <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                    Save Changes
+                                </button>
+                            </div>
                         </div>
 
                         <div class="bg-white rounded-lg shadow">
@@ -232,6 +347,53 @@
                                     </div>
                                 </template>
                             </div>
+                            <div class="px-6 py-4 border-t bg-gray-50">
+                                <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow">
+                            <div class="px-6 py-4 border-b flex justify-between items-center">
+                                <h2 class="text-lg font-semibold">Skills & Expertise</h2>
+                                <button @click="addSkill()" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                                    Add Skill
+                                </button>
+                            </div>
+                            <div class="p-6">
+                                <template x-for="(skill, index) in data.skills" :key="index">
+                                    <div class="mb-4 p-4 border rounded">
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+                                            <div>
+                                                <input type="text" x-model="skill.name" placeholder="Skill Name (e.g., JavaScript, Leadership)" class="w-full px-3 py-2 border rounded">
+                                            </div>
+                                            <div>
+                                                <select x-model="skill.category" class="w-full px-3 py-2 border rounded">
+                                                    <option value="">Select Category</option>
+                                                    <option value="technical">Technical Skills</option>
+                                                    <option value="professional">Professional Skills</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <input type="range" x-model="skill.level" min="1" max="100" class="flex-1">
+                                                <span class="text-sm font-medium w-12" x-text="skill.level + '%'"></span>
+                                            </div>
+                                        </div>
+                                        <button @click="removeSkill(index)" class="text-red-600 text-sm hover:underline">Remove</button>
+                                    </div>
+                                </template>
+                                <template x-if="data.skills.length === 0">
+                                    <div class="text-center text-gray-500 py-8">
+                                        <p>No skills added yet. Click "Add Skill" to showcase your expertise!</p>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="px-6 py-4 border-t bg-gray-50">
+                                <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                    Save Changes
+                                </button>
+                            </div>
                         </div>
 
                         <div class="bg-white rounded-lg shadow">
@@ -262,6 +424,11 @@
                                         <option value="purple">Royal Purple</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="px-6 py-4 border-t bg-gray-50">
+                                <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                    Save Changes
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -308,6 +475,11 @@
                                     </div>
                                 </div>
                             </template>
+                        </div>
+                        <div class="mt-6 pt-4 border-t bg-gray-50 -mx-6 px-6 py-4">
+                            <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                Save Changes
+                            </button>
                         </div>
                     </div>
 
@@ -389,6 +561,11 @@
                                     </div>
                                 </template>
                             </div>
+                            <div class="px-6 py-4 border-t bg-gray-50">
+                                <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                    Save Changes
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -400,7 +577,7 @@
                                 <h3 class="text-lg font-semibold mb-4">Select an Image</h3>
                                 <div class="grid grid-cols-4 gap-4 max-h-96 overflow-y-auto">
                                     <template x-for="image in images" :key="image.filename">
-                                        <img :src="image.thumbnailUrl || image.url" class="w-full h-24 object-cover rounded cursor-pointer hover:ring-2 hover:ring-blue-500" @click="confirmImageSelection(image.hqUrl || image.url)">
+                                        <img :src="image.thumbnailUrl || image.url" class="w-full h-24 object-cover rounded cursor-pointer hover:ring-2 hover:ring-blue-500" @click="selectBestImageUrl(image)">
                                     </template>
                                 </div>
                                 <div class="mt-4 flex justify-end">
@@ -423,6 +600,7 @@
                     profile: {},
                     resume: [],
                     projects: [],
+                    skills: [],
                     blogPosts: []
                 },
                 showSetup: true,
@@ -442,6 +620,9 @@
                     linkedInUsername: '',
                     blogEnabled: false
                 },
+                resumeUploading: false,
+                resumeParsed: false,
+                resumeData: null,
                 
                 async init() {
                     await this.loadData();
@@ -457,6 +638,7 @@
                             profile: data.profile || {},
                             resume: data.resume || [],
                             projects: data.projects || [],
+                            skills: data.skills || [],
                             blogPosts: (data.blogPosts || []).map(post => ({
                                 ...post,
                                 tagsString: post.tags ? post.tags.join(', ') : ''
@@ -571,8 +753,12 @@
                 },
 
                 confirmImageSelection(url) {
+                    console.log('confirmImageSelection called with URL:', url);
+                    console.log('imageSelectionTarget:', this.imageSelectionTarget);
+                    
                     if (this.imageSelectionTarget === 'profile') {
                         this.data.profile.photo = url;
+                        console.log('Set profile photo to:', url);
                     } else if (this.imageSelectionTarget === 'project' && this.imageSelectionIndex !== null) {
                         this.data.projects[this.imageSelectionIndex].image = url;
                     } else if (this.imageSelectionTarget === 'blog' && this.imageSelectionIndex !== null) {
@@ -588,6 +774,33 @@
                         this.confirmImageSelection(url);
                     }
                 },
+
+                async selectBestImageUrl(image) {
+                    console.log('selectBestImageUrl called with image:', image);
+                    // Try to use high-quality URL first, fallback to regular URL
+                    let bestUrl = image.url;
+                    
+                    if (image.hqUrl) {
+                        console.log('Checking high-quality URL:', image.hqUrl);
+                        try {
+                            // Check if high-quality image exists
+                            const response = await fetch(image.hqUrl, { method: 'HEAD' });
+                            console.log('High-quality URL check response status:', response.status);
+                            if (response.ok) {
+                                bestUrl = image.hqUrl;
+                                console.log('✅ Using high-quality image:', bestUrl);
+                            } else {
+                                console.log('❌ High-quality image not found (status ' + response.status + '), using regular:', bestUrl);
+                            }
+                        } catch (error) {
+                            console.log('❌ Error checking high-quality image:', error, 'using regular:', bestUrl);
+                        }
+                    } else {
+                        console.log('No hqUrl provided, using regular URL:', bestUrl);
+                    }
+                    
+                    this.confirmImageSelection(bestUrl);
+                },
                 
                 async completeSetup() {
                     const setupData = {
@@ -602,8 +815,25 @@
                         },
                         blogEnabled: this.setupAnswers.blogEnabled === 'true',
                         resume: [],
-                        projects: []
+                        projects: [],
+                        skills: []
                     };
+
+                    // If we have resume data, include it
+                    if (this.resumeData) {
+                        // Add experience entries
+                        if (this.resumeData.experience) {
+                            setupData.resume = setupData.resume.concat(this.resumeData.experience);
+                        }
+                        // Add education entries
+                        if (this.resumeData.education) {
+                            setupData.resume = setupData.resume.concat(this.resumeData.education);
+                        }
+                        // Add awards entries
+                        if (this.resumeData.awards) {
+                            setupData.resume = setupData.resume.concat(this.resumeData.awards);
+                        }
+                    }
                     
                     try {
                         const response = await fetch('/api/setup', {
@@ -655,6 +885,18 @@
                 removeProject(index) {
                     this.data.projects.splice(index, 1);
                 },
+                
+                addSkill() {
+                    this.data.skills.push({
+                        name: '',
+                        level: 50,
+                        category: 'technical'
+                    });
+                },
+                
+                removeSkill(index) {
+                    this.data.skills.splice(index, 1);
+                },
 
                 addBlogPost() {
                     const now = new Date();
@@ -679,7 +921,66 @@
                     if (confirm('Are you sure you want to delete this blog post?')) {
                         this.data.blogPosts.splice(index, 1);
                     }
-                }
+                },
+
+                async uploadResume(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    this.resumeUploading = true;
+                    this.resumeParsed = false;
+                    this.resumeData = null;
+
+                    try {
+                        const formData = new FormData();
+                        formData.append('resume', file);
+
+                        const response = await fetch('/api/upload-resume', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok && result.success) {
+                            this.resumeData = result.parsedData;
+                            this.resumeParsed = true;
+                            console.log('Parsed resume data:', result.parsedData);
+                        } else {
+                            alert('Failed to parse resume: ' + (result.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        console.error('Resume upload error:', error);
+                        alert('Failed to upload resume');
+                    } finally {
+                        this.resumeUploading = false;
+                        event.target.value = ''; // Clear the file input
+                    }
+                },
+
+                useResumeData() {
+                    if (!this.resumeData) return;
+
+                    // Apply profile data
+                    if (this.resumeData.profile.name) {
+                        this.setupAnswers.name = this.resumeData.profile.name;
+                    }
+                    if (this.resumeData.profile.email) {
+                        this.setupAnswers.email = this.resumeData.profile.email;
+                    }
+                    if (this.resumeData.profile.location) {
+                        this.setupAnswers.location = this.resumeData.profile.location;
+                    }
+                    if (this.resumeData.profile.title) {
+                        this.setupAnswers.title = this.resumeData.profile.title;
+                    }
+                    if (this.resumeData.profile.bio) {
+                        this.setupAnswers.bio = this.resumeData.profile.bio;
+                    }
+                    
+                    alert('Profile information has been applied to the form! Resume entries will be imported when you complete setup.');
+                },
+
             }
         }
 

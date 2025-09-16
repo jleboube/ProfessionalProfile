@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
 import Hero from '../components/Hero.astro';
 import TechnicalPath from '../components/TechnicalPath.astro';
+import SkillsChart from '../components/SkillsChart.astro';
 import Projects from '../components/Projects.astro';
 import GitHubContributions from '../components/GitHubContributions.astro';
 import Contact from '../components/Contact.astro';
@@ -10,7 +11,7 @@ import ThemeSwitcher from '../components/ThemeSwitcher.astro';
 import { getSiteData } from '../utils/data';
 
 const data = await getSiteData();
-const { profile, resume, projects, blogEnabled, colorTheme } = data;
+const { profile, resume, projects, skills, blogEnabled, colorTheme } = data;
 ---
 
 <BaseLayout title={`${profile.name || 'Portfolio'} - ${profile.title || 'Professional Portfolio'}`}>
@@ -19,6 +20,7 @@ const { profile, resume, projects, blogEnabled, colorTheme } = data;
   <main>
     <Hero profile={profile} />
     <TechnicalPath resume={resume} />
+    <SkillsChart skills={skills} />
     <Projects projects={projects} />
     {profile.githubUsername && (
       <GitHubContributions username={profile.githubUsername} />

@@ -12,6 +12,12 @@ export interface ProfileData {
   photo?: string;
 }
 
+export interface Skill {
+  name: string;
+  level: number; // 1-100
+  category: 'technical' | 'professional';
+}
+
 export interface ResumeEntry {
   type: 'experience' | 'education' | 'awards';
   company: string;
@@ -52,6 +58,7 @@ export interface SiteData {
   colorTheme: 'ocean' | 'forest' | 'sunset' | 'purple';
   resume: ResumeEntry[];
   projects: Project[];
+  skills: Skill[];
   blogEnabled: boolean;
   blogPosts: BlogPost[];
 }
@@ -78,6 +85,7 @@ export async function getSiteData(): Promise<SiteData> {
       colorTheme: 'ocean',
       resume: [],
       projects: [],
+      skills: [],
       blogEnabled: false,
       blogPosts: []
     };
