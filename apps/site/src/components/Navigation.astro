@@ -15,7 +15,9 @@ const { profile, blogEnabled } = Astro.props;
       <a href="/" class="text-xl font-bold text-gray-900 dark:text-white">
         {profile.name || 'Portfolio'}
       </a>
-      <div class="flex items-center space-x-6">
+      
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-6">
         <a href="/#hero" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
           About
         </a>
@@ -34,6 +36,129 @@ const { profile, blogEnabled } = Astro.props;
           Contact
         </a>
       </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button 
+        id="mobile-menu-button"
+        class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        aria-label="Toggle mobile menu"
+      >
+        <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <div 
+      id="mobile-menu" 
+      class="md:hidden absolute left-0 right-0 top-full bg-white/95 dark:bg-gray-950/95 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 shadow-lg hidden"
+    >
+      <div class="px-4 py-6 space-y-4">
+        <a href="/#hero" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 border-b border-gray-100 dark:border-gray-800">
+          About
+        </a>
+        <a href="/resume" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 border-b border-gray-100 dark:border-gray-800">
+          Resume
+        </a>
+        <a href="/#projects" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 border-b border-gray-100 dark:border-gray-800">
+          Projects
+        </a>
+        {blogEnabled && (
+          <a href="/blog" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 border-b border-gray-100 dark:border-gray-800">
+            Blog
+          </a>
+        )}
+        <a href="/#contact" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2">
+          Contact
+        </a>
+      </div>
     </div>
   </div>
 </nav>
+
+<script>
+  // Mobile menu toggle functionality
+  function initMobileMenu() {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (!mobileMenuButton || !mobileMenu) return;
+    
+    let isMenuOpen = false;
+    
+    function toggleMenu() {
+      isMenuOpen = !isMenuOpen;
+      
+      if (isMenuOpen) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.classList.add('animate-fade-in');
+        // Update hamburger icon to X
+        mobileMenuButton.innerHTML = `
+          <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        `;
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('animate-fade-in');
+        // Update X icon back to hamburger
+        mobileMenuButton.innerHTML = `
+          <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        `;
+      }
+    }
+    
+    // Toggle menu on button click
+    mobileMenuButton.addEventListener('click', toggleMenu);
+    
+    // Close menu when clicking on a link
+    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (isMenuOpen) {
+          toggleMenu();
+        }
+      });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (isMenuOpen && !mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+        toggleMenu();
+      }
+    });
+    
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isMenuOpen) {
+        toggleMenu();
+      }
+    });
+  }
+  
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', initMobileMenu);
+  
+  // Also initialize on Astro page transitions (if using view transitions)
+  document.addEventListener('astro:page-load', initMobileMenu);
+</script>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out;
+  }
+</style>
