@@ -16,6 +16,6 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./
 RUN npm install --omit=dev
 
-EXPOSE 3000
+EXPOSE 3003
 
 CMD ["node", "./dist/server/entry.mjs"]

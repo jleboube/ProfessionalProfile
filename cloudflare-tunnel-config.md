@@ -4,7 +4,7 @@ This guide will help you configure Cloudflare tunnels to make your portfolio acc
 
 ## Architecture
 
-- **Main Site**: `my-domain.com` → `localhost:3000` (Portfolio Site)
+- **Main Site**: `my-domain.com` → `localhost:3003` (Portfolio Site)
 - **Admin Portal**: `admin.my-domain.com` → `localhost:6900` (Admin Interface)
 
 ## Cloudflare Tunnel Configuration
@@ -31,9 +31,9 @@ ingress:
   - hostname: admin.my-domain.com
     service: http://localhost:6900
     
-  # Main domain
-  - hostname: my-domain.com
-    service: http://localhost:3000
+   # Main domain
+   - hostname: my-domain.com
+      service: http://localhost:3003
     
   # Catch-all rule (required)
   - service: http_status:404
@@ -55,7 +55,7 @@ In your Cloudflare dashboard:
 
 3. **Set up Public Hostnames**:
    - Subdomain: `admin`, Domain: `my-domain.com`, Service: `http://localhost:6900`
-   - Subdomain: (leave empty), Domain: `my-domain.com`, Service: `http://localhost:3000`
+   - Subdomain: (leave empty), Domain: `my-domain.com`, Service: `http://localhost:3003`
 
 ### 4. Alternative: Using CLI Commands
 
@@ -154,7 +154,7 @@ cloudflared tunnel info portfolio-tunnel
 sudo journalctl -u cloudflared -f
 
 # Test local services
-curl http://localhost:3000  # Test main site
+curl http://localhost:3003  # Test main site
 curl http://localhost:6900  # Test admin portal
 ```
 

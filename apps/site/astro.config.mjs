@@ -9,7 +9,7 @@ export default defineConfig({
     mode: 'standalone'
   }),
   server: {
-    port: 3000,
+    port: 3003,
     host: true
   },
   vite: {

@@ -94,7 +94,7 @@ docker compose up --build -d
 ```
 
 4. **Access your portfolio**
-- Main Site: `http://localhost:3000`
+- Main Site: `http://localhost:3003`
 - Admin Panel: `http://localhost:6900/admin`
 
 5. **Complete Setup Wizard**
@@ -163,9 +163,9 @@ server {
     listen 80;
     server_name yourdomain.com;
     
-    location / {
-        proxy_pass http://localhost:3000;
-    }
+  location / {
+    proxy_pass http://localhost:3003;
+  }
 }
 ```
 
