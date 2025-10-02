@@ -9,7 +9,7 @@
   
   **Transform your professional journey into a stunning digital portfolio in minutes!**
   
-  [Demo](#demo) • [Features](#-features) • [Quick Start](#quick-start) • [Roadmap](#roadmap)
+  [Demo](https://goprores.com) • [Features](#key-features) • [Quick Start](#quick-start) • [Roadmap](#roadmap)
   
 </div>
 
@@ -19,7 +19,7 @@
 
 Built by tech professionals for tech professionals, Portfolio Pro is the ultimate solution for creating a compelling online presence without the hassle of building from scratch. Whether you're a software engineer, data scientist, DevOps specialist, or any tech professional, showcase your expertise with style.
 
-## 🎯 Key Features
+# 🎯 Key Features
 
 ### 🎨 **Beautiful, Responsive Design**
 - **Multiple Color Themes** - Ocean Blue, Forest Green, Sunset Orange, Royal Purple
@@ -67,7 +67,7 @@ Built by tech professionals for tech professionals, Portfolio Pro is the ultimat
 - **Session-Based Security** - Secure token generation for admin access
 - **Data Persistence** - Docker volume mapping ensures your data is never lost
 
-## 🚀 Quick Start
+# 🚀 Quick Start
 
 ### Prerequisites
 - Docker & Docker Compose
@@ -169,7 +169,7 @@ server {
 }
 ```
 
-## 🗺️ Roadmap
+# 🗺️ Roadmap
 
 ### Coming Soon (Phase 2)
 - 📄 **Resume Upload & Parser** - Upload your existing resume during setup to automatically populate experience, education, and awards
