@@ -9,7 +9,7 @@
   
   **Transform your professional journey into a stunning digital portfolio in minutes!**
   
-  [Demo](https://goprores.com) • [Features](#key-features) • [Quick Start](#quick-start) • [Roadmap](#roadmap)
+  [Demo](https://goprores.com:target=”_blank”) • [Features](#key-features) • [Quick Start](#quick-start) • [Roadmap](#roadmap)
   
 </div>
 
