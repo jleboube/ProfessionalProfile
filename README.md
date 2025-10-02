@@ -6,10 +6,17 @@
   [![Astro](https://img.shields.io/badge/Astro-Powered-FF5D01?style=for-the-badge&logo=astro)](https://astro.build/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-Styled-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
   [![Node.js](https://img.shields.io/badge/Node.js-Backend-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
+
+  [![GitHub stars](https://img.shields.io/github/stars/jleboube/ProfessionalProfile?style=social)](https://github.com/jleboube/ProfessionalProfile/stargazers)
+  [![GitHub forks](https://img.shields.io/github/forks/jleboube/ProfessionalProfile?style=social)](https://github.com/jleboube/ProfessionalProfile/network/members)
+  [![GitHub issues](https://img.shields.io/github/issues/jleboube/ProfessionalProfile)](https://github.com/jleboube/ProfessionalProfile/issues)
+  [![GitHub pull requests](https://img.shields.io/github/issues-pr/jleboube/ProfessionalProfile)](https://github.com/jleboube/ProfessionalProfile/pulls)
+  [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+  <!-- [![License](https://img.shields.io/github/license/jleboube/ProfessionalProfile)](LICENSE) -->
   
   **Transform your professional journey into a stunning digital portfolio in minutes!**
   
-  [Demo](https://goprores.com:target=”_blank”) • [Features](#key-features) • [Quick Start](#quick-start) • [Roadmap](#roadmap)
+  [Demo]("https://goprores.com"target=”_blank”) • [Features](#key-features) • [Quick Start](#quick-start) • [Roadmap](#roadmap)
   
 </div>
 
