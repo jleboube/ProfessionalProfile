@@ -24,7 +24,7 @@ const { profile, blogEnabled } = Astro.props;
         <a href="/resume" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
           Resume
         </a>
-        <a href="/#projects" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+        <a href="/projects" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
           Projects
         </a>
         {blogEnabled && (
@@ -50,8 +50,8 @@ const { profile, blogEnabled } = Astro.props;
     </div>
 
     <!-- Mobile Navigation Menu -->
-    <div 
-      id="mobile-menu" 
+    <div
+      id="mobile-menu"
       class="md:hidden absolute left-0 right-0 top-full bg-white/95 dark:bg-gray-950/95 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 shadow-lg hidden"
     >
       <div class="px-4 py-6 space-y-4">
@@ -61,7 +61,7 @@ const { profile, blogEnabled } = Astro.props;
         <a href="/resume" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 border-b border-gray-100 dark:border-gray-800">
           Resume
         </a>
-        <a href="/#projects" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 border-b border-gray-100 dark:border-gray-800">
+        <a href="/projects" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 border-b border-gray-100 dark:border-gray-800">
           Projects
         </a>
         {blogEnabled && (

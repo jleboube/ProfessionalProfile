@@ -6,14 +6,24 @@ interface Props {
 }
 
 const { projects } = Astro.props;
+
+// Filter to only show featured projects (max 6)
+const featuredProjects = projects
+  .filter(project => project.featuredOnHome)
+  .slice(0, 6);
 ---
 
 <section id="projects" class="py-20">
   <div class="container mx-auto px-4">
-    <h2 class="text-4xl font-bold text-center mb-12">Featured Projects</h2>
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold mb-4">Featured Projects</h2>
+      <a href="/projects" class="text-primary-600 dark:text-primary-400 hover:underline">
+        View All Projects →
+      </a>
+    </div>
     <div class="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
-      {projects.length > 0 ? (
-        projects.map((project) => (
+      {featuredProjects.length > 0 ? (
+        featuredProjects.map((project) => (
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)] max-w-sm">
             {project.image && (
               <img

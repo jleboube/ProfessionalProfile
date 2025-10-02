@@ -10,6 +10,7 @@ import sharp from 'sharp';
 import crypto from 'crypto';
 import mammoth from 'mammoth';
 import { extractText } from 'unpdf';
+import archiver from 'archiver';
 
 dotenv.config();
 
@@ -515,6 +516,70 @@ app.delete('/api/images/:filename', async (req, res) => {
   } catch (error) {
     console.error('Error deleting image:', error);
     res.status(500).json({ error: 'Failed to delete image' });
+  }
+});
+
+// Backup endpoints
+app.get('/api/backup/content', async (req, res) => {
+  try {
+    const data = await readData();
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+    const filename = `portfolio-backup-${timestamp}.json`;
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error('Content backup error:', error);
+    res.status(500).json({ error: 'Failed to create content backup' });
+  }
+});
+
+app.get('/api/backup/full', async (req, res) => {
+  try {
+    const data = await readData();
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+    const filename = `portfolio-backup-${timestamp}.zip`;
+
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Maximum compression
+    });
+
+    archive.on('error', (err) => {
+      console.error('Archive error:', err);
+      res.status(500).json({ error: 'Failed to create archive' });
+    });
+
+    // Pipe archive to response
+    archive.pipe(res);
+
+    // Add data.json to archive
+    archive.append(JSON.stringify(data, null, 2), { name: 'data.json' });
+
+    // Add all files from uploads directory
+    try {
+      const files = await fs.readdir(UPLOADS_DIR);
+      for (const file of files) {
+        const filePath = path.join(UPLOADS_DIR, file);
+        const stat = await fs.stat(filePath);
+        if (stat.isFile()) {
+          archive.file(filePath, { name: `uploads/${file}` });
+        }
+      }
+    } catch (uploadError) {
+      console.log('No uploads directory or empty:', uploadError.message);
+    }
+
+    // Finalize archive
+    await archive.finalize();
+  } catch (error) {
+    console.error('Full backup error:', error);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Failed to create full backup' });
+    }
   }
 });
 

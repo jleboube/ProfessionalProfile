@@ -39,6 +39,7 @@ export interface Project {
   image: string;
   url: string;
   source: string;
+  featuredOnHome?: boolean;
 }
 
 export interface BlogPost {

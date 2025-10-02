@@ -1,33 +1,18 @@
 {
-  "setupCompleted": false,
+  "setupCompleted": true,
   "profile": {
     "name": "",
     "title": "",
     "bio": "",
     "location": "",
     "email": "",
-    "githubUsername": ""
+    "githubUsername": "",
+    "linkedInUsername": ""
   },
   "theme": "system",
-  "resume": [
-    {
-      "company": "",
-      "role": "",
-      "start": "",
-      "end": "",
-      "summary": ""
-    }
-  ],
-  "projects": [
-    {
-      "name": "",
-      "description": "",
-      "image": "",
-      "url": "",
-      "source": ""
-    }
-  ],
+  "resume": [],
+  "projects": [],
   "blogEnabled": false,
-  "blogPosts": []
+  "blogPosts": [],
+  "skills": []
 }
-

@@ -25,6 +25,9 @@
                         <button @click="activeTab = 'media'" :class="activeTab === 'media' ? 'text-blue-600' : 'text-gray-600'" class="px-3 py-2">
                             Media Library
                         </button>
+                        <button @click="activeTab = 'backup'" :class="activeTab === 'backup' ? 'text-blue-600' : 'text-gray-600'" class="px-3 py-2">
+                            Backup
+                        </button>
                         <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
                             Save Changes
                         </button>
@@ -326,9 +329,15 @@
                                             <div class="flex-1">
                                                 <input type="text" x-model="project.name" placeholder="Project Name" class="w-full px-3 py-2 border rounded mb-2">
                                                 <textarea x-model="project.description" placeholder="Description" rows="2" class="w-full px-3 py-2 border rounded mb-2"></textarea>
-                                                <div class="grid grid-cols-2 gap-2">
+                                                <div class="grid grid-cols-2 gap-2 mb-2">
                                                     <input type="text" x-model="project.url" placeholder="Live URL" class="px-3 py-2 border rounded">
                                                     <input type="text" x-model="project.source" placeholder="Source Code URL" class="px-3 py-2 border rounded">
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <input type="checkbox" :id="'featured-' + index" x-model="project.featuredOnHome" class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                                    <label :for="'featured-' + index" class="text-sm font-medium text-gray-700">
+                                                        Featured on Home Page
+                                                    </label>
                                                 </div>
                                             </div>
                                             <div class="flex-shrink-0">
@@ -483,6 +492,105 @@
                         </div>
                     </div>
 
+                    <!-- Backup Tab -->
+                    <div x-show="activeTab === 'backup'" class="bg-white rounded-lg shadow p-6">
+                        <h2 class="text-lg font-semibold mb-6">Backup Your Data</h2>
+                        <p class="text-gray-600 mb-6">Create a backup of your portfolio data to easily restore or transfer to a new instance.</p>
+
+                        <template x-if="!backupStep || backupStep === 'initial'">
+                            <div class="space-y-4">
+                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                    <div class="flex items-start">
+                                        <svg class="w-5 h-5 text-yellow-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                        </svg>
+                                        <div>
+                                            <h3 class="font-semibold text-yellow-800 mb-1">Do you have unsaved changes?</h3>
+                                            <p class="text-sm text-yellow-700 mb-3">If you have made changes since your last save, please save them before creating a backup.</p>
+                                            <div class="flex gap-3">
+                                                <button @click="backupStep = 'goToSave'" class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors">
+                                                    Yes, I need to save
+                                                </button>
+                                                <button @click="backupStep = 'selectType'" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors">
+                                                    No, proceed with backup
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="backupStep === 'goToSave'">
+                            <div class="space-y-4">
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <div class="flex items-start">
+                                        <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <div>
+                                            <h3 class="font-semibold text-blue-800 mb-1">Save Your Changes</h3>
+                                            <p class="text-sm text-blue-700 mb-3">Please go to the Content tab and click "Save Changes" to save your work. Then come back here to create your backup.</p>
+                                            <button @click="activeTab = 'content'; backupStep = 'initial'" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                                                Go to Content Tab
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="backupStep === 'selectType'">
+                            <div class="space-y-4">
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+                                    <h3 class="font-semibold text-gray-800 mb-4">Select Backup Type</h3>
+                                    <div class="space-y-3">
+                                        <button @click="downloadBackup('content')" class="w-full text-left p-4 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
+                                            <div class="flex items-start">
+                                                <svg class="w-6 h-6 text-gray-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                </svg>
+                                                <div>
+                                                    <h4 class="font-semibold mb-1">Content Only</h4>
+                                                    <p class="text-sm text-gray-600">Download your profile data, projects, resume, and blog posts (JSON file)</p>
+                                                </div>
+                                            </div>
+                                        </button>
+
+                                        <button @click="downloadBackup('full')" class="w-full text-left p-4 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
+                                            <div class="flex items-start">
+                                                <svg class="w-6 h-6 text-gray-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                                </svg>
+                                                <div>
+                                                    <h4 class="font-semibold mb-1">Content + Media</h4>
+                                                    <p class="text-sm text-gray-600">Download everything including images from Media Library (ZIP file)</p>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </div>
+
+                                    <div class="mt-4 pt-4 border-t border-gray-200">
+                                        <button @click="backupStep = 'initial'" class="text-gray-600 hover:text-gray-800 text-sm">
+                                            ← Back
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="backupDownloading">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                                <svg class="animate-spin h-8 w-8 text-blue-600 mx-auto mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <p class="text-blue-800 font-semibold">Preparing your backup...</p>
+                                <p class="text-sm text-blue-600 mt-1">This may take a moment for large media libraries</p>
+                            </div>
+                        </template>
+                    </div>
+
                     <!-- Blog Tab -->
                     <div x-show="activeTab === 'blog'" class="space-y-6">
                         <div class="bg-white rounded-lg shadow">
@@ -623,6 +731,8 @@
                 resumeUploading: false,
                 resumeParsed: false,
                 resumeData: null,
+                backupStep: 'initial',
+                backupDownloading: false,
                 
                 async init() {
                     await this.loadData();
@@ -979,6 +1089,50 @@
                     }
                     
                     alert('Profile information has been applied to the form! Resume entries will be imported when you complete setup.');
+                },
+
+                async downloadBackup(type) {
+                    this.backupDownloading = true;
+
+                    try {
+                        const endpoint = type === 'content' ? '/api/backup/content' : '/api/backup/full';
+                        const response = await fetch(endpoint);
+
+                        if (!response.ok) {
+                            throw new Error('Backup failed');
+                        }
+
+                        // Get filename from Content-Disposition header or create default
+                        const contentDisposition = response.headers.get('Content-Disposition');
+                        let filename = type === 'content' ? 'portfolio-backup.json' : 'portfolio-backup.zip';
+
+                        if (contentDisposition) {
+                            const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+                            if (matches != null && matches[1]) {
+                                filename = matches[1].replace(/['"]/g, '');
+                            }
+                        }
+
+                        // Create blob and download
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+
+                        // Reset state
+                        this.backupDownloading = false;
+                        this.backupStep = 'initial';
+                        alert('Backup downloaded successfully!');
+                    } catch (error) {
+                        console.error('Backup error:', error);
+                        this.backupDownloading = false;
+                        alert('Failed to create backup. Please try again.');
+                    }
                 },
 
             }
