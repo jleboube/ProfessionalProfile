@@ -133,6 +133,7 @@ async function readData() {
       theme: 'system',
       resume: [],
       projects: [],
+      services: [],
       blogEnabled: false,
       blogPosts: []
     };
@@ -380,6 +381,7 @@ app.post('/api/setup', async (req, res) => {
     profile: setupData.profile || data.profile,
     resume: setupData.resume || data.resume,
     projects: setupData.projects || data.projects,
+    services: setupData.services || data.services || [],
     skills: setupData.skills || data.skills || [],
     blogEnabled: setupData.blogEnabled !== undefined ? setupData.blogEnabled : data.blogEnabled
   };

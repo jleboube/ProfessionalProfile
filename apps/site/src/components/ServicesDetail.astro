@@ -1,0 +1,67 @@
+---
+import type { Service, ProfileData } from '../utils/data';
+
+interface Props {
+  services: Service[];
+  profile: ProfileData;
+}
+
+const { services, profile } = Astro.props;
+
+const contactEmail = profile.email ? `mailto:${profile.email}` : '';
+---
+
+<section class="space-y-8">
+  {services.length > 0 ? (
+    services.map((service) => (
+      <article class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all">
+        <div class="p-8 md:p-10">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div class="md:w-3/4 space-y-5">
+              <h2 class="text-3xl font-semibold text-gray-900 dark:text-white">
+                {service.title}
+              </h2>
+              <p class="text-lg leading-relaxed text-gray-600 dark:text-gray-300 whitespace-pre-line">
+                {service.summary}
+              </p>
+              {service.highlights && service.highlights.length > 0 && (
+                <ul class="space-y-3">
+                  {service.highlights.map((highlight) => (
+                    <li class="flex items-start gap-3 text-gray-700 dark:text-gray-300">
+                      <span class="mt-2 h-2 w-2 rounded-full bg-primary-500 flex-shrink-0"></span>
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {contactEmail && (
+              <div class="md:w-1/4 flex md:flex-col md:items-end items-center gap-3">
+                <a
+                  href={contactEmail}
+                  class="inline-flex items-center justify-center px-5 py-3 bg-primary-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+                >
+                  Request This Service
+                </a>
+                {profile.linkedInUsername && (
+                  <a
+                    href={`https://linkedin.com/in/${profile.linkedInUsername}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center justify-center px-5 py-3 border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Connect on LinkedIn
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </article>
+    ))
+  ) : (
+    <div class="text-center text-gray-500 dark:text-gray-400 py-12 border border-dashed border-gray-300 dark:border-gray-600 rounded-xl">
+      <p>Services are coming soon. Check back shortly!</p>
+    </div>
+  )}
+</section>

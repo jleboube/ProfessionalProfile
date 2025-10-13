@@ -365,6 +365,50 @@
 
                         <div class="bg-white rounded-lg shadow">
                             <div class="px-6 py-4 border-b flex justify-between items-center">
+                                <h2 class="text-lg font-semibold">Services</h2>
+                                <button @click="addService()" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                                    Add Service
+                                </button>
+                            </div>
+                            <div class="p-6">
+                                <template x-for="(service, index) in data.services" :key="index">
+                                    <div class="mb-4 p-4 border rounded space-y-3">
+                                        <div class="space-y-3">
+                                            <input type="text" x-model="service.title" placeholder="Service Title (e.g., Technical Advisory)" class="w-full px-3 py-2 border rounded">
+                                            <textarea x-model="service.summary" placeholder="Service Overview" rows="3" class="w-full px-3 py-2 border rounded"></textarea>
+                                            <div>
+                                                <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Highlights (one per line)</label>
+                                                <textarea
+                                                    x-model="service.highlightsString"
+                                                    rows="4"
+                                                    class="w-full px-3 py-2 border rounded"
+                                                    placeholder="Strategic cloud migration planning&#10;Executive stakeholder alignment workshops&#10;Hands-on delivery leadership"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                                            <span>Each highlight becomes a bullet point on the site.</span>
+                                            <button @click="removeService(index)" class="text-red-600 hover:underline">
+                                                Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template x-if="data.services.length === 0">
+                                    <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+                                        <p>No services added yet. Click &ldquo;Add Service&rdquo; to outline how you help clients.</p>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="px-6 py-4 border-t bg-gray-50">
+                                <button @click="saveData()" class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow">
+                            <div class="px-6 py-4 border-b flex justify-between items-center">
                                 <h2 class="text-lg font-semibold">Skills & Expertise</h2>
                                 <button @click="addSkill()" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
                                     Add Skill
@@ -708,6 +752,7 @@
                     profile: {},
                     resume: [],
                     projects: [],
+                    services: [],
                     skills: [],
                     blogPosts: []
                 },
@@ -748,9 +793,17 @@
                             profile: data.profile || {},
                             resume: data.resume || [],
                             projects: data.projects || [],
+                            services: (data.services || []).map(service => ({
+                                ...service,
+                                title: service.title || '',
+                                summary: service.summary || '',
+                                highlights: Array.isArray(service.highlights) ? service.highlights : [],
+                                highlightsString: Array.isArray(service.highlights) ? service.highlights.join('\n') : ''
+                            })),
                             skills: data.skills || [],
                             blogPosts: (data.blogPosts || []).map(post => ({
                                 ...post,
+                                tags: post.tags || [],
                                 tagsString: post.tags ? post.tags.join(', ') : ''
                             })),
                             colorTheme: data.colorTheme || 'ocean'
@@ -774,6 +827,16 @@
                     try {
                         // Process blog posts before saving
                         const processedData = { ...this.data };
+                        processedData.services = this.data.services.map(service => {
+                            const highlights = service.highlightsString
+                                ? service.highlightsString.split('\n').map(item => item.trim()).filter(item => item.length > 0)
+                                : [];
+                            const { highlightsString, ...rest } = service;
+                            return {
+                                ...rest,
+                                highlights
+                            };
+                        });
                         processedData.blogPosts = this.data.blogPosts.map(post => ({
                             ...post,
                             tags: post.tagsString ? post.tagsString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0) : []
@@ -926,6 +989,7 @@
                         blogEnabled: this.setupAnswers.blogEnabled === 'true',
                         resume: [],
                         projects: [],
+                        services: [],
                         skills: []
                     };
 
@@ -994,6 +1058,19 @@
                 
                 removeProject(index) {
                     this.data.projects.splice(index, 1);
+                },
+
+                addService() {
+                    this.data.services.push({
+                        title: '',
+                        summary: '',
+                        highlights: [],
+                        highlightsString: ''
+                    });
+                },
+
+                removeService(index) {
+                    this.data.services.splice(index, 1);
                 },
                 
                 addSkill() {

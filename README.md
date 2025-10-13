@@ -233,4 +233,3 @@ If Portfolio Pro helps you land your dream job or showcase your skills, consider
 Made with ❤️ by tech professionals, for tech professionals
 
 </div>
-

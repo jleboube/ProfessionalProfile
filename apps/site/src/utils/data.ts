@@ -42,6 +42,12 @@ export interface Project {
   featuredOnHome?: boolean;
 }
 
+export interface Service {
+  title: string;
+  summary: string;
+  highlights?: string[];
+}
+
 export interface BlogPost {
   id: string;
   title: string;
@@ -59,6 +65,7 @@ export interface SiteData {
   colorTheme: 'ocean' | 'forest' | 'sunset' | 'purple';
   resume: ResumeEntry[];
   projects: Project[];
+  services: Service[];
   skills: Skill[];
   blogEnabled: boolean;
   blogPosts: BlogPost[];
@@ -86,6 +93,7 @@ export async function getSiteData(): Promise<SiteData> {
       colorTheme: 'ocean',
       resume: [],
       projects: [],
+      services: [],
       skills: [],
       blogEnabled: false,
       blogPosts: []

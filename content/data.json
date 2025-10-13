@@ -1,18 +1,225 @@
 {
   "setupCompleted": true,
   "profile": {
-    "name": "",
-    "title": "",
-    "bio": "",
-    "location": "",
-    "email": "",
-    "githubUsername": "",
-    "linkedInUsername": ""
+    "name": "Joe LeBoube",
+    "title": "Technology Professional",
+    "bio": "Technology leader with 20+ years driving digital transformation, Generative AI integration, and cloud adoption for enterprise organizations. Proven track record of scaling teams, delivering multimillion-dollar cost savings, and bridging technical execution with C-suite strategy. ",
+    "location": "Evansville, IN 47725",
+    "email": "joeleboube@gmail.com",
+    "githubUsername": "jleboube",
+    "linkedInUsername": "joe-leboube",
+    "photo": "/uploads/hq-image-1759264222801-953060386.png"
   },
   "theme": "system",
-  "resume": [],
-  "projects": [],
-  "blogEnabled": false,
+  "resume": [
+    {
+      "type": "experience",
+      "company": "Amazon Web Services",
+      "role": "Sr Customer Solutions Manager",
+      "location": "Remote",
+      "start": "April 2022",
+      "end": "PRESENT",
+      "summary": "- Lead cloud migration strategies for enterprise customers (Fortune 500-2000) across manufacturing, financial services, and healthcare sectors\n- Help customers “think big” about how their business can grow using GenAI solutions tied to their data sources. Collaborated with AWS Partners and AWS Service teams to deliver POC with customer to illustrate business value. Project was approved and customer saved $75k/month in monthly invoice reconciliation and AWS added ~$200k ARR\n- Assisted customer in using updated methods of Observability to surface applicable data in more rich format and real time. Engaged AWS Specialists and Partner team to create POC demonstrating AWS native services meeting customer requirements.  Customer moved from third party observability product to AWS native services resulting in ~$10M/year in savings for customer and ~$2.5M ARR for AWS\n- Collaborate with customer and AWS Partner to move customer off Oracle RAC using Exadata to Aurora/PostgreSQL saving ~$6.5M/year in licensing and support costs.  AWS increased ARR $4M with new Aurora/PostgreSQL\n- Created and ran SaaS security training curriculum creation for NAMER AWS CSMs, which was introduced six months after starting and was released as mandatory training\n- Completed AWS Associate Solutions Architect Certification valid 2022-2025\n- Named Central CSM of the year 2023\n"
+    },
+    {
+      "type": "experience",
+      "company": "Entegral",
+      "role": "Department Manager",
+      "location": "Madison, WI",
+      "start": "March 2017",
+      "end": "March 2022",
+      "summary": "- Provide solutions to software product teams to enable platform features targeted to enhance feature delivery. For example, no down-time deployments, blue/green deployments, and service mesh\n- Collaborate with technical architects and senior leadership to successfully transition a monolith application stack to a modern cloud architecture, leveraging industry standards such as Kubernetes, Containers, and a solid development pipeline\n- Established Dev-Ops enablement teams (Observability, CI/CD Pipeline, SRE) to help increase productivity and development efficiency by providing integrated tooling and mentorship to software product teams\n- Participated in organizational transformation toward agile development practices and trained in the fundamentals of Product Management and Product Ownership\n- Led Infrastructure team from managing work using a FIFO queue to using KanBan for better priority management and visibility into team activities to pursue a true DevOps environment\n- Expanded our Desktop Services team from three to seven based on ticket analysis, customer satisfaction, and forecasted organizational growth. This increased customer satisfaction by 33% in less than one year\n"
+    },
+    {
+      "type": "experience",
+      "school": "",
+      "degree": "Available Upon Request",
+      "start": "March 2015",
+      "end": "March 2017",
+      "summary": "- Responsible for multiple products in the Orchestration layer of the Launchpad solution. This included API design, documentation, and development\n- Worked to help the QA team add several resources seamlessly, while also adding Test Automation as a priority\n- Collaborated with senior technical leaders and management to define the strategy for our solutions and ensure it adheres with the overall IT future direction\n- In partnership with Sr. Leadership, developed and evangelized the R&D technical vision with internal and external stakeholders\n- Led a new team to a 60% improvement in support incidents through an increased focus on quality and technical debt\n- Partnered with the Infrastructure and Public Cloud teams to plan for future architecture designs to drive sustainability and reliability\n",
+      "company": "Enterprise Mobility",
+      "role": "Department Manager"
+    },
+    {
+      "type": "awards",
+      "award": "AWS Central CSM of the Year",
+      "organization": "2023",
+      "start": "",
+      "end": "",
+      "summary": ""
+    },
+    {
+      "type": "experience",
+      "award": "AT&T",
+      "organization": "St Louis",
+      "start": "May 2007",
+      "end": "May 2015",
+      "summary": "- Worked with technical leaders to provide a resilient architecture across multiple regions to allow for high availability to ensure the best customer and employee experience\n- Created a daytime support Engineer role in an effort to alleviate the strain of daytime support inquiries\n- Successfully completed a Proof of Concept around new mobile technologies to enhance vehicle data obtained by EHI, which required collaboration with several outside vendors and internal stakeholders\n- Key contributor for International expansion when EHI launched in Spain and France\n- Created and maintained service based team structure (API storefront, the Hub, development standards, support, release schedule and scoping) that has been replicated across the organization\n",
+      "role": "Manager -> Sr Manager",
+      "company": "Enterprise Mobility"
+    },
+    {
+      "type": "experience",
+      "award": "May 2000 - May 2007",
+      "organization": "",
+      "start": "May 2000",
+      "end": "May 2007",
+      "summary": "- Worked directly on mergers with Ameritech, AT&T, and BellSouth to integrate systems and maximize efficiency.\n- Managed large ($15M) AT&T/BellSouth merger project, aimed at saving $34M after one year, to completion on time and under budget, with minimal defects.  Provided direction and coordination for all phases of the SDLC.\n- Led a team of Project Managers as well as project technical/operational teams, facilitated project meetings, and maintained the project objectives through effective management skills.\n- Supported the implementation of an FCC mandated CMP (Change Management Process) for our application environment\n",
+      "company": "AT&T",
+      "role": "Project Manager -> Manager"
+    },
+    {
+      "type": "experience",
+      "company": "JCN Internet Services",
+      "role": "Help Desk -> LAN/WAN Support -> Assistant Billing Manager",
+      "start": "March 1998",
+      "end": "May 2000",
+      "summary": "- Assisted customers with internet related and billing problems\n- Aided in CAT 5 cable installation, Windows NT Server installation, iMail Server configuration, domain name registrations, web design, and network security\n- Experience with adding customers, marking customers as “paid”, suspending accounts, etc in the Peachtree accounting software suite\n",
+      "school": "",
+      "degree": "",
+      "organization": "",
+      "award": ""
+    },
+    {
+      "type": "experience",
+      "company": "Cecil Whittaker's Pizza",
+      "role": "Delivery Driver",
+      "start": "April 1996",
+      "end": "May 2000",
+      "summary": "- Managed front register while not delivering pies\n- Conversed with local police, fire, and EMS personnel while they enjoyed free food, courtesy of the employees at Cecil Whitakers\n- Delivered hot pies to customers in a 20 mile radius and ensured no toppings slid and the pie was still piping hot\n- Pioneered “Delivery Paging”, which allowed the on duty Manager to page the delivery driver when a delivery order was placed.  This allowed delivery drivers to play whiffle ball in between deliveries\n",
+      "school": "",
+      "degree": "",
+      "organization": "",
+      "award": ""
+    }
+  ],
+  "projects": [
+    {
+      "name": "Majic-Photo",
+      "description": "Save time, cut costs, and reduce stress with professional, AI-powered Real Estate photography. We transform simple Real Estate images into captivating, ready-to-use photos without the hassle of a traditional \n",
+      "image": "/uploads/hq-image-1758818969294-905699055.png",
+      "url": "https://majicphotoaio.com",
+      "source": "https://github.com/jleboube/Majic-Photo",
+      "featuredOnHome": true
+    },
+    {
+      "name": "Crypto Wallet/Asset Tracker",
+      "description": "Want to track your crypto assets without adding your wallet address?  My Crypto Wallet Tracker is your app!  Give it a try for free!",
+      "image": "/uploads/hq-image-1758822887259-579772580.png",
+      "url": "https://my.crypto-wallet-tracker.com",
+      "source": ""
+    },
+    {
+      "name": "Diji-Scribe",
+      "description": "Want to scale your audio/video transcription?  Want to save personnel expenses by using AI to transcribe your audio/video files to text files?  Give Diji-Scribe a try today!",
+      "image": "/uploads/hq-image-1758823056912-205374989.png",
+      "url": "https://diji-scribe.com",
+      "source": "https://github.com/jleboube/Diji-Scribe",
+      "featuredOnHome": true
+    },
+    {
+      "name": "Call-Bio",
+      "description": "After 20+ years in technology, I've sat through thousands of virtual meetings. And if there's one thing I've learned, it's this: we've all been there.\nYou know the drill. You join a Zoom call with 8 people you've never met. The host says, \"Let's go around and introduce ourselves.\" Suddenly you're scrambling to remember what you do, wondering if you should mention that random certification from 2019, and secretly googling the other attendees under the table.\nMeanwhile, 10 precious minutes tick by before we even get to the actual agenda. Sound familiar?",
+      "image": "/uploads/hq-image-1758835160697-769831943.png",
+      "url": "https://call-bio.com",
+      "source": "https://github.com/jleboube/call-bio/",
+      "featuredOnHome": true
+    },
+    {
+      "name": "No-Hitter Forecaster",
+      "description": "No-hitters in baseball are rare.  As of writing this, there hasn't been a no-hitter thrown in over 400 days.  I tried predicting who would throw the next no-hitter, daily.  ",
+      "image": "/uploads/hq-image-1758835534689-501668625.png",
+      "url": "https://nohitter.predictionapp.net/",
+      "source": "https://github.com/jleboube/no-hitter-analysis"
+    },
+    {
+      "name": "SteganoWeb",
+      "description": "Do you like hidden messages?  Do you like decoding hidden messages or coding hidden messages into seemingly innocent photos?  Check out our site that dives into the fun world of Steganography.  Give it a try today!",
+      "image": "/uploads/hq-image-1759173109425-533290959.png",
+      "url": "https://steganoweb.com/",
+      "source": "https://github.com/jleboube/SteganoWeb",
+      "featuredOnHome": true
+    },
+    {
+      "name": "Professional Profile/Personal Website",
+      "description": "Do you want a professional website where you can host your resume, personal projects, and a blog?  This project helps you get started.  Clone the repo, build and deploy with docker compose, then access the admin portal to answer initial questions and upload your resume to build your professional website.",
+      "image": "",
+      "url": "https://joeleboube.com",
+      "source": "https://github.com/jleboube/ProfessionalProfile"
+    }
+  ],
+  "services": [
+    {
+      "title": "Technology Advisory & Executive Alignment",
+      "summary": "Partner with senior leadership to translate business objectives into actionable technology roadmaps, ensuring every initiative has clear KPIs, ownership, and measurable outcomes.",
+      "highlights": [
+        "Facilitated modernization programs for Fortune 500-2000 organizations across manufacturing, financial services, and healthcare",
+        "Bridges communication between product, engineering, and C-suite stakeholders to accelerate decision-making",
+        "Delivers pragmatic playbooks that keep teams focused on delivering value while de-risking change"
+      ]
+    },
+    {
+      "title": "Cloud Migration & Platform Modernization",
+      "summary": "Hands-on leadership moving mission-critical workloads from legacy systems to scalable, secure cloud-native architectures without disrupting business operations.",
+      "highlights": [
+        "Led multi-million dollar migrations from Oracle RAC/Exadata to AWS Aurora/PostgreSQL with measurable savings",
+        "Introduces DevOps practices such as blue/green deployments, service mesh, and observability to uplift delivery teams",
+        "Builds cross-functional squads and governance models that keep modernization programs on track"
+      ]
+    },
+    {
+      "title": "AI & Automation Enablement",
+      "summary": "Guide teams from experimentation to production with Generative AI and intelligent automation, backed by the right data foundations and security guardrails.",
+      "highlights": [
+        "Designed GenAI proof-of-concepts that unlocked six-figure savings in finance operations and new ARR for partners",
+        "Coaches teams on data readiness, responsible AI guidelines, and change management for organization-wide adoption",
+        "Connects clients with the right partner ecosystem to accelerate pilots into production-ready solutions"
+      ]
+    }
+  ],
+  "blogEnabled": true,
   "blogPosts": [],
-  "skills": []
+  "skills": [
+    {
+      "name": "Docker",
+      "level": "80",
+      "category": "technical"
+    },
+    {
+      "name": "JavaScript",
+      "level": "60",
+      "category": "technical"
+    },
+    {
+      "name": "Leadership",
+      "level": "90",
+      "category": "professional"
+    },
+    {
+      "name": "Communication",
+      "level": "95",
+      "category": "professional"
+    },
+    {
+      "name": "Python",
+      "level": "40",
+      "category": "technical"
+    },
+    {
+      "name": "Coachable",
+      "level": "100",
+      "category": "professional"
+    },
+    {
+      "name": "Vibe Coding (GenAI)",
+      "level": "70",
+      "category": "technical"
+    },
+    {
+      "name": "Empathy",
+      "level": "80",
+      "category": "professional"
+    }
+  ],
+  "colorTheme": "ocean"
 }
