@@ -261,11 +261,12 @@
                                 <template x-for="(entry, index) in data.resume" :key="index">
                                     <div class="mb-4 p-4 border rounded">
                                         <div class="flex items-center gap-2 mb-3">
-                                            <span x-text="entry.type === 'education' ? '🎓' : entry.type === 'awards' ? '🏆' : '💼'"></span>
+                                            <span x-text="entry.type === 'education' ? '🎓' : entry.type === 'awards' ? '🏆' : entry.type === 'certifications' ? '📜' : '💼'"></span>
                                             <select x-model="entry.type" class="px-2 py-1 border rounded text-sm">
                                                 <option value="experience">Experience</option>
                                                 <option value="education">Education</option>
                                                 <option value="awards">Awards</option>
+                                                <option value="certifications">Certifications</option>
                                             </select>
                                         </div>
                                         
@@ -296,6 +297,18 @@
                                                     <input type="text" x-model="entry.organization" placeholder="Organization" class="px-3 py-2 border rounded">
                                                     <input type="text" x-model="entry.award" placeholder="Award Name" class="px-3 py-2 border rounded">
                                                 </div>
+                                            </div>
+                                        </template>
+                                        
+                                        <!-- Certification Fields -->
+                                        <template x-if="entry.type === 'certifications'">
+                                            <div class="space-y-2">
+                                                <input type="text" x-model="entry.certification" placeholder="Certification Name" class="w-full px-3 py-2 border rounded">
+                                                <div class="grid grid-cols-2 gap-4">
+                                                    <input type="text" x-model="entry.issuer" placeholder="Issuing Organization" class="px-3 py-2 border rounded">
+                                                    <input type="text" x-model="entry.credentialId" placeholder="Credential ID (optional)" class="px-3 py-2 border rounded">
+                                                </div>
+                                                <input type="text" x-model="entry.credentialUrl" placeholder="Verification URL (optional)" class="w-full px-3 py-2 border rounded">
                                             </div>
                                         </template>
                                         
@@ -791,7 +804,13 @@
                         this.data = {
                             ...data,
                             profile: data.profile || {},
-                            resume: data.resume || [],
+                            resume: (data.resume || []).map(entry => ({
+                                ...entry,
+                                certification: entry.certification || '',
+                                issuer: entry.issuer || '',
+                                credentialId: entry.credentialId || '',
+                                credentialUrl: entry.credentialUrl || ''
+                            })),
                             projects: data.projects || [],
                             services: (data.services || []).map(service => ({
                                 ...service,
@@ -1038,7 +1057,11 @@
                         school: '',
                         degree: '',
                         organization: '',
-                        award: ''
+                        award: '',
+                        certification: '',
+                        issuer: '',
+                        credentialId: '',
+                        credentialUrl: ''
                     });
                 },
                 

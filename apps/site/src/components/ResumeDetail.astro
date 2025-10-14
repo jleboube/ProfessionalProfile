@@ -11,11 +11,13 @@ const { resume } = Astro.props;
 const experience = resume.filter(entry => entry.type === 'experience' || !entry.type);
 const education = resume.filter(entry => entry.type === 'education');
 const awards = resume.filter(entry => entry.type === 'awards');
+const certifications = resume.filter(entry => entry.type === 'certifications');
 
 const sections = [
   { title: 'Professional Experience', entries: experience, icon: '💼' },
   { title: 'Education', entries: education, icon: '🎓' },
-  { title: 'Awards & Recognition', entries: awards, icon: '🏆' }
+  { title: 'Awards & Recognition', entries: awards, icon: '🏆' },
+  { title: 'Certifications', entries: certifications, icon: '📜' }
 ].filter(section => section.entries.length > 0);
 ---
 
@@ -45,6 +47,13 @@ const sections = [
                         <h3 class="text-xl font-semibold">{entry.award || entry.role}</h3>
                         <p class="text-primary-600 dark:text-primary-400">{entry.organization || entry.company}</p>
                       </>
+                    ) : entry.type === 'certifications' ? (
+                      <>
+                        <h3 class="text-xl font-semibold">{entry.certification || entry.role || entry.award}</h3>
+                        <p class="text-primary-600 dark:text-primary-400">
+                          {entry.issuer || entry.organization || entry.company}
+                        </p>
+                      </>
                     ) : (
                       <>
                         <h3 class="text-xl font-semibold">{entry.role}</h3>
@@ -57,6 +66,23 @@ const sections = [
                   </span>
                 </div>
                 <p class="text-gray-600 dark:text-gray-300 whitespace-pre-line">{entry.summary}</p>
+                {entry.credentialId && (
+                  <p class="text-sm text-gray-500 dark:text-gray-400 mt-3">
+                    Credential ID: {entry.credentialId}
+                  </p>
+                )}
+                {entry.credentialUrl && (
+                  <p class="mt-2">
+                    <a
+                      href={entry.credentialUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-sm text-primary-600 dark:text-primary-400 hover:underline"
+                    >
+                      View Credential
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           ))}

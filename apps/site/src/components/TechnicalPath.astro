@@ -12,6 +12,7 @@ function generateTechnicalSummary(resume: ResumeEntry[]) {
   const experience = resume.filter(entry => entry.type === 'experience' || !entry.type);
   const education = resume.filter(entry => entry.type === 'education');
   const awards = resume.filter(entry => entry.type === 'awards');
+  const certifications = resume.filter(entry => entry.type === 'certifications');
   
   // Calculate years of experience
   const currentYear = new Date().getFullYear();
@@ -78,6 +79,7 @@ function generateTechnicalSummary(resume: ResumeEntry[]) {
   
   // Get recent achievements
   const recentAchievements = awards.length > 0 ? awards.slice(0, 2) : [];
+  const recentCertifications = certifications.length > 0 ? certifications.slice(0, 3) : [];
   
   return {
     yearsOfExperience,
@@ -86,9 +88,11 @@ function generateTechnicalSummary(resume: ResumeEntry[]) {
     companiesList: uniqueCompanies,
     educationSummary,
     recentAchievements,
+    recentCertifications,
     totalExperiences: experience.length,
     totalEducation: education.length,
-    totalAwards: awards.length
+    totalAwards: awards.length,
+    totalCertifications: certifications.length
   };
 }
 
@@ -137,6 +141,17 @@ const summary = generateTechnicalSummary(resume);
               </div>
             </div>
           )}
+          
+          {summary.totalCertifications > 0 && (
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-64">
+              <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+                {summary.totalCertifications}
+              </div>
+              <div class="text-gray-600 dark:text-gray-300">
+                Professional Certifications
+              </div>
+            </div>
+          )}
         </div>
         
         <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md mb-8">
@@ -171,14 +186,33 @@ const summary = generateTechnicalSummary(resume);
             </p>
           )}
           
-          {summary.recentAchievements.length > 0 && (
+          {(summary.recentAchievements.length > 0 || summary.recentCertifications.length > 0) && (
             <div class="mt-4 text-center">
-              <h4 class="font-semibold mb-2">Recent Achievements:</h4>
-              <ul class="text-center text-gray-600 dark:text-gray-300">
-                {summary.recentAchievements.map(achievement => (
-                  <li class="mb-1">🏆 {achievement.award || achievement.role} at {achievement.organization || achievement.company}</li>
-                ))}
-              </ul>
+              {summary.recentAchievements.length > 0 && (
+                <div class="mb-4">
+                  <h4 class="font-semibold mb-2">Recent Achievements:</h4>
+                  <ul class="text-center text-gray-600 dark:text-gray-300">
+                    {summary.recentAchievements.map(achievement => (
+                      <li class="mb-1">🏆 {achievement.award || achievement.role} at {achievement.organization || achievement.company}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {summary.recentCertifications.length > 0 && (
+                <div>
+                  <h4 class="font-semibold mb-2">Latest Certifications:</h4>
+                  <ul class="text-center text-gray-600 dark:text-gray-300">
+                    {summary.recentCertifications.map(cert => (
+                      <li class="mb-1">
+                        📜 {cert.certification || cert.role || cert.award}
+                        {cert.issuer || cert.organization || cert.company ? (
+                          <> — {cert.issuer || cert.organization || cert.company}</>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
         </div>

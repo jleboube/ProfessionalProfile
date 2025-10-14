@@ -19,7 +19,7 @@ export interface Skill {
 }
 
 export interface ResumeEntry {
-  type: 'experience' | 'education' | 'awards';
+  type: 'experience' | 'education' | 'awards' | 'certifications';
   company: string;
   role: string;
   start: string;
@@ -31,6 +31,11 @@ export interface ResumeEntry {
   // For awards
   organization?: string;
   award?: string;
+  // For certifications
+  certification?: string;
+  issuer?: string;
+  credentialId?: string;
+  credentialUrl?: string;
 }
 
 export interface Project {
